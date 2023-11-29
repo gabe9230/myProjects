@@ -1,3 +1,6 @@
+//test
+
+
 let canvas = document.getElementById("c")
 let ctx = canvas.getContext("2d")
 let width = 150
