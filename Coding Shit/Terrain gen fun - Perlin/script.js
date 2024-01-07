@@ -12,6 +12,10 @@ let layer2Mult = 0.5
 let layer3Mult = 0.25
 let cameraX = 500
 let cameraY = 500
+let player = {
+  x: cameraX+(width/2),
+  y: cameraY+(width/2),
+}
 let controls = []
 
 let perlin = {
@@ -72,10 +76,10 @@ function dist(x1,y1,x2,y2) {
 }
 
 function perlinToGrid(e,m) {
-  if (e < 0.05) {return 0} else
-  if (e < 0.1) {return 1} else
-  if (e < 0.12) {return 2} else
-  if (e < 0.15) {return 3} else
+  if (e < 0.015) {return 0} else
+  if (e < 0.05) {return 1} else
+  if (e < 0.07) {return 2} else
+  if (e < 0.1) {return 3} else
   if (e > 0.8) {
     if (m < 0.1) {return 4} else if (m < 0.2) {return 5} else if (m < 0.5) {return 6} else if (m <= 1.1) {return 7} 
   } else if (e > 0.6) {
@@ -219,6 +223,9 @@ function draw() {
       if (grid[x][y].val == 16) {
         ctx.fillStyle = "rgb(19, 66, 0)"
       }
+      if (x === player.x && y === player.y) {
+          ctx.fillStyle = "rgb(0,0,0)"
+      }
       ctx.fillRect((x-cameraX)*pixelSize,(y-cameraY)*pixelSize,pixelSize,pixelSize)
     }
   }
@@ -226,24 +233,28 @@ function draw() {
 
 function west() {
   cameraX--
+  player.x = Math.floor(cameraX+(width/2))
   perlinMask()
   draw()
 }
 
 function east() {
   cameraX++
+  player.x = Math.floor(cameraX+(width/2))
   perlinMask()
   draw()
 }
 
 function north() {
   cameraY--
+  player.y = Math.floor(cameraY+(height/2))
   perlinMask()
   draw()
 }
 
 function south() {
   cameraY++
+  player.y = Math.floor(cameraY+(height/2))
   perlinMask()
   draw()
 }
@@ -306,7 +317,8 @@ function start() {
   setupGrid()
   removeEdge()
   perlinMask()
-  
+  player.x = Math.floor(cameraX+(width/2))
+  player.y = Math.floor(cameraY+(height/2))
   draw()
 }
 start()
