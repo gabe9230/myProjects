@@ -27,5 +27,7 @@ function OutputDeNumerifier(x) {
 input = (InputNumerifier(input))
 
 function shift(i) {
+    for (let i = 0; i < input.length; i++) {
 
+    }
 }
