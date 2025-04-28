@@ -1,12 +1,788 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width">
-    <title></title>
-  </head>
-  <body>
-    <canvas id="c"></canvas>
-    <script src="script.js"></script>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript to HAAS G-code Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .editor-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .editor-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .panel-header {
+            background: #2c3e50;
+            color: white;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+            font-weight: bold;
+        }
+        textarea, pre {
+            flex: 1;
+            min-height: 400px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 0 0 5px 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre;
+            overflow: auto;
+            background: #f8f8f8;
+            margin: 0;
+        }
+        textarea {
+            background: #fefefe;
+            resize: none;
+        }
+        pre {
+            background: #f0f0f0;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 20px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .examples {
+            margin-top: 30px;
+        }
+        .example-btn {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            background: #27ae60;
+        }
+        .example-btn:hover {
+            background: #219653;
+        }
+        .download-btn {
+            background: #e67e22;
+        }
+        .download-btn:hover {
+            background: #d35400;
+        }
+        .copy-btn {
+            background: #9b59b6;
+        }
+        .copy-btn:hover {
+            background: #8e44ad;
+        }
+        .docs-btn {
+            background: #34495e;
+        }
+        .docs-btn:hover {
+            background: #2c3e50;
+        }
+        .error {
+            color: #e74c3c;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #e74c3c;
+            border-radius: 5px;
+            background: #fadbd8;
+            display: none;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 5px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close:hover {
+            color: black;
+        }
+        .syntax-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .syntax-table th, .syntax-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .syntax-table th {
+            background-color: #f2f2f2;
+        }
+        .syntax-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        code {
+            background-color: #f0f0f0;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 15px;
+        }
+        .tab-btn {
+            padding: 10px 15px;
+            background: #ddd;
+            border: none;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        .tab-btn.active {
+            background: #3498db;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>JavaScript to HAAS G-code Converter</h1>
+        
+        <div class="error" id="error-message"></div>
+        
+        <div class="controls">
+            <button id="convert-btn">Convert to G-code</button>
+            <button id="copy-btn" class="copy-btn">Copy G-code</button>
+            <button id="download-btn" class="download-btn">Download G-code</button>
+            <button id="docs-btn" class="docs-btn">View Syntax Documentation</button>
+        </div>
+        
+        <div class="editor-container">
+            <div class="editor-panel">
+                <div class="panel-header">JavaScript Machining Code</div>
+                <textarea id="js-code" spellcheck="false">// Define your part parameters
+const partWidth = 4.0;
+const partLength = 6.0;
+const holeDiameter = 0.5;
+const toolDiameter = 0.375;
+
+function generateGCode() {
+    const haas = new HaasGCodeGenerator('0020', 'Sample Part');
+    
+    // Program setup
+    haas.programStart();
+    haas.toolChange(1, '1/2" END MILL');
+    haas.startPosition(1.0, 1.0, 2500);
+    haas.plungeIntoPart(-0.1, 10);
+    
+    // Face milling operation
+    haas.faceMill(0, 0, partWidth, partLength, -0.1, 0.05, toolDiameter);
+    
+    // Drill holes
+    const holes = [
+        {x: 0.5, y: 0.5},
+        {x: partWidth-0.5, y: 0.5},
+        {x: partWidth-0.5, y: partLength-0.5},
+        {x: 0.5, y: partLength-0.5}
+    ];
+    
+    haas.plungeIntoPart(0.1); // Return to safe plane
+    holes.forEach(hole => {
+        haas.drillHole(hole.x, hole.y, 0.1, -0.6, 0.1, 0.5);
+    });
+    
+    return haas.programEnd();
+}</textarea>
+            </div>
+            
+            <div class="editor-panel">
+                <div class="panel-header">Generated G-code</div>
+                <pre id="g-code-output">(G-code will appear here)</pre>
+            </div>
+        </div>
+        
+        <div class="examples">
+            <h3>Example Programs:</h3>
+            <button class="example-btn" data-example="face-mill">Face Milling</button>
+            <button class="example-btn" data-example="drilling">Drilling Pattern</button>
+            <button class="example-btn" data-example="contour">Contour Milling</button>
+            <button class="example-btn" data-example="pocket">Rectangular Pocket</button>
+        </div>
+    </div>
+
+    <!-- Documentation Modal -->
+    <div id="docs-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>HAAS G-code Generator Syntax Documentation</h2>
+            
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="overview">Overview</button>
+                <button class="tab-btn" data-tab="program-structure">Program Structure</button>
+                <button class="tab-btn" data-tab="movement">Movement</button>
+                <button class="tab-btn" data-tab="operations">Machining Operations</button>
+            </div>
+            
+            <div id="overview" class="tab-content active">
+                <h3>Overview</h3>
+                <p>This converter allows you to write machining operations in JavaScript that get converted to HAAS-compatible G-code. The generated code follows standard HAAS program structure:</p>
+                <pre>
+%
+Oxxxx (PROGRAM NAME)
+G17 G40 G80 G54 G20
+G28 G91 G0 X0 Y0 Z0
+M06 T1 (TOOL DESCRIPTION)
+G0 G90 G54 X_ Y_ S_ M3
+G43 H1 Z0.1 M8
+G1 Z_ F_
+
+[YOUR MACHINING OPERATIONS]
+
+G40 G80
+G0 Z2.0 M9
+G28 G91 G0 X0 Y0 Z0 M5
+M30
+%</pre>
+                <p>All coordinates are in inches (G20) by default. The generator maintains proper tool offsets, coolant control, and safety moves.</p>
+            </div>
+            
+            <div id="program-structure" class="tab-content">
+                <h3>Program Structure Methods</h3>
+                <table class="syntax-table">
+                    <tr>
+                        <th>Method</th>
+                        <th>Parameters</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><code>programStart()</code></td>
+                        <td>None</td>
+                        <td>Initializes program with safety lines and header</td>
+                        <td><code>haas.programStart();</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>programEnd()</code></td>
+                        <td>None</td>
+                        <td>Ends program with safety moves and M30</td>
+                        <td><code>return haas.programEnd();</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>toolChange()</code></td>
+                        <td>toolNumber, description</td>
+                        <td>Performs tool change with comment</td>
+                        <td><code>haas.toolChange(1, '1/2" END MILL');</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>startPosition()</code></td>
+                        <td>x, y, [spindleSpeed]</td>
+                        <td>Moves to start position, starts spindle</td>
+                        <td><code>haas.startPosition(1.0, 1.0, 2500);</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>plungeIntoPart()</code></td>
+                        <td>z, [feedRate]</td>
+                        <td>Plunges tool into material at feed rate</td>
+                        <td><code>haas.plungeIntoPart(-0.1, 10);</code></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div id="movement" class="tab-content">
+                <h3>Movement Methods</h3>
+                <table class="syntax-table">
+                    <tr>
+                        <th>Method</th>
+                        <th>Parameters</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><code>rapidMove()</code></td>
+                        <td>x, y, z</td>
+                        <td>G00 rapid movement to position</td>
+                        <td><code>haas.rapidMove(2.0, 3.0, 0.1);</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>linearMove()</code></td>
+                        <td>x, y, z, [feedRate]</td>
+                        <td>G01 linear move at feed rate</td>
+                        <td><code>haas.linearMove(2.0, 3.0, -0.1, 15);</code></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div id="operations" class="tab-content">
+                <h3>Machining Operations</h3>
+                <table class="syntax-table">
+                    <tr>
+                        <th>Method</th>
+                        <th>Parameters</th>
+                        <th>Description</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td><code>drillHole()</code></td>
+                        <td>x, y, startZ, depth, [peckDepth], [dwell]</td>
+                        <td>Drills hole (G81/G83) with optional pecking</td>
+                        <td><code>haas.drillHole(1.0, 1.0, 0.1, -0.5, 0.1, 0.5);</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>faceMill()</code></td>
+                        <td>startX, startY, width, length, depth, stepDown, toolDiameter</td>
+                        <td>Faces rectangular area</td>
+                        <td><code>haas.faceMill(0, 0, 5.0, 3.0, -0.1, 0.05, 0.5);</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>contourMill()</code></td>
+                        <td>contourPoints, depth, stepDown, toolDiameter</td>
+                        <td>Mills contour defined by points</td>
+                        <td><code>haas.contourMill(points, -0.5, 0.1, 0.375);</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>pocketMill()</code></td>
+                        <td>startX, startY, width, length, depth, stepDown, toolDiameter</td>
+                        <td>Mills rectangular pocket</td>
+                        <td><code>haas.pocketMill(1.0, 1.0, 3.0, 2.0, -0.375, 0.1, 0.25);</code></td>
+                    </tr>
+                </table>
+                
+                <h3>JavaScript Program Structure</h3>
+                <p>Your program must define a <code>generateGCode()</code> function that returns the result of <code>programEnd()</code>:</p>
+                <pre>
+// Define parameters
+const width = 5.0;
+const toolDiameter = 0.5;
+
+function generateGCode() {
+    const haas = new HaasGCodeGenerator('0101', 'My Part');
+    
+    // Setup
+    haas.programStart();
+    haas.toolChange(1, '1/2" END MILL');
+    haas.startPosition(1.0, 1.0, 2500);
+    haas.plungeIntoPart(-0.1, 10);
+    
+    // Operations
+    haas.faceMill(0, 0, width, width, -0.1, 0.05, toolDiameter);
+    
+    // Return generated code
+    return haas.programEnd();
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // G-code generator class
+        class HaasGCodeGenerator {
+            constructor(programNumber = '0020', programName = 'Project Number') {
+                this.gCode = [];
+                this.programNumber = programNumber;
+                this.programName = programName;
+                this.currentTool = 1;
+                this.currentSpindleSpeed = 2000;
+                this.currentFeedRate = 10;
+                this.safeZ = 2.0;
+                this.rapidPlane = 0.1;
+                this.toolOffset = 1;
+                this.workOffset = 'G54';
+                this.decimalPlaces = 4;
+            }
+
+            addLine(line = '') {
+                this.gCode.push(line);
+            }
+
+            comment(text) {
+                this.addLine(`(${text})`);
+            }
+
+            programStart() {
+                this.addLine('%');
+                this.addLine(`O${this.programNumber}_ (${this.programName})`);
+                this.addLine('G17 G40 G80 G54 G20');
+                this.addLine('G28 G91 G0 X0 Y0 Z0');
+            }
+
+            toolChange(toolNumber, toolDescription = '') {
+                this.currentTool = toolNumber;
+                this.addLine(`M06 T${toolNumber} (Tool: ${toolDescription})`);
+            }
+
+            startPosition(x, y, spindleSpeed = null) {
+                if (spindleSpeed !== null) this.currentSpindleSpeed = spindleSpeed;
+                this.addLine(`G0 G90 ${this.workOffset} X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} S${this.currentSpindleSpeed} M3`);
+                this.addLine(`G43 H${this.toolOffset} Z${this.rapidPlane.toFixed(this.decimalPlaces)} M8`);
+            }
+
+            plungeIntoPart(z, feedRate = null) {
+                if (feedRate !== null) this.currentFeedRate = feedRate;
+                this.addLine(`G1 Z${z.toFixed(this.decimalPlaces)} F${this.currentFeedRate}`);
+            }
+
+            programEnd() {
+                this.addLine('G40 G80');
+                this.addLine(`G0 Z${this.safeZ.toFixed(this.decimalPlaces)} M9`);
+                this.addLine('G28 G91 G0 X0 Y0 Z0 M5');
+                this.addLine('M30');
+                this.addLine('%');
+                return this.getGCode();
+            }
+
+            rapidMove(x, y, z) {
+                this.addLine(`G0 X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} Z${z.toFixed(this.decimalPlaces)}`);
+            }
+
+            linearMove(x, y, z, feedRate = null) {
+                if (feedRate !== null) this.currentFeedRate = feedRate;
+                this.addLine(`G1 X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} Z${z.toFixed(this.decimalPlaces)} F${this.currentFeedRate}`);
+            }
+
+            drillHole(x, y, startZ, depth, peckDepth = 0, dwell = 0) {
+                this.comment(`Drilling hole at X${x} Y${y}`);
+                this.rapidMove(x, y, this.rapidPlane);
+                this.plungeIntoPart(startZ);
+                
+                if (peckDepth > 0) {
+                    this.addLine(`G83 X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} Z${depth.toFixed(this.decimalPlaces)} Q${peckDepth.toFixed(this.decimalPlaces)} R${startZ.toFixed(this.decimalPlaces)} P${dwell.toFixed(2)} F${this.currentFeedRate}`);
+                } else {
+                    this.addLine(`G81 X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} Z${depth.toFixed(this.decimalPlaces)} R${startZ.toFixed(this.decimalPlaces)} F${this.currentFeedRate}${dwell > 0 ? ` P${dwell.toFixed(2)}` : ''}`);
+                }
+                
+                this.addLine('G80');
+                this.rapidMove(x, y, this.rapidPlane);
+            }
+
+            faceMill(startX, startY, width, length, depth, stepDown, toolDiameter) {
+                this.comment(`Facing operation: ${width}x${length} area to depth ${depth}`);
+                const radius = toolDiameter / 2;
+                const passes = Math.ceil(Math.abs(depth) / Math.abs(stepDown));
+                
+                for (let pass = 1; pass <= passes; pass++) {
+                    const currentDepth = Math.min(pass * stepDown, depth);
+                    this.comment(`Pass ${pass} at depth ${currentDepth.toFixed(this.decimalPlaces)}`);
+                    
+                    for (let y = startY + radius; y <= startY + length - radius; y += toolDiameter * 0.8) {
+                        this.rapidMove(startX + radius, y, this.rapidPlane);
+                        this.linearMove(startX + radius, y, currentDepth);
+                        this.linearMove(startX + width - radius, y, currentDepth);
+                        this.rapidMove(startX + width - radius, y, this.rapidPlane);
+                    }
+                }
+                
+                this.rapidMove(startX + radius, startY + radius, this.rapidPlane);
+            }
+
+            contourMill(contourPoints, depth, stepDown, toolDiameter) {
+                this.comment(`Contour milling at depth ${depth}`);
+                const radius = toolDiameter / 2;
+                const passes = Math.ceil(Math.abs(depth) / Math.abs(stepDown));
+                
+                for (let pass = 1; pass <= passes; pass++) {
+                    const currentDepth = Math.min(pass * stepDown, depth);
+                    this.comment(`Pass ${pass} at depth ${currentDepth.toFixed(this.decimalPlaces)}`);
+                    
+                    const firstPoint = contourPoints[0];
+                    this.rapidMove(firstPoint.x + radius, firstPoint.y + radius, this.rapidPlane);
+                    this.linearMove(firstPoint.x + radius, firstPoint.y + radius, currentDepth);
+                    
+                    for (let i = 1; i < contourPoints.length; i++) {
+                        const point = contourPoints[i];
+                        this.linearMove(point.x + radius, point.y + radius, currentDepth);
+                    }
+                    
+                    this.linearMove(firstPoint.x + radius, firstPoint.y + radius, currentDepth);
+                    this.rapidMove(firstPoint.x + radius, firstPoint.y + radius, this.rapidPlane);
+                }
+            }
+
+            pocketMill(startX, startY, width, length, depth, stepDown, toolDiameter) {
+                this.comment(`Pocket milling: ${width}x${length} to depth ${depth}`);
+                const radius = toolDiameter / 2;
+                const passes = Math.ceil(Math.abs(depth) / Math.abs(stepDown));
+                
+                for (let pass = 1; pass <= passes; pass++) {
+                    const currentDepth = Math.min(pass * stepDown, depth);
+                    this.comment(`Pass ${pass} at depth ${currentDepth.toFixed(this.decimalPlaces)}`);
+                    
+                    let offset = 0;
+                    while (offset < width/2 - radius && offset < length/2 - radius) {
+                        this.rapidMove(startX + radius + offset, startY + radius + offset, this.rapidPlane);
+                        this.linearMove(startX + radius + offset, startY + radius + offset, currentDepth);
+                        
+                        this.linearMove(startX + width - radius - offset, startY + radius + offset, currentDepth);
+                        this.linearMove(startX + width - radius - offset, startY + length - radius - offset, currentDepth);
+                        this.linearMove(startX + radius + offset, startY + length - radius - offset, currentDepth);
+                        this.linearMove(startX + radius + offset, startY + radius + offset, currentDepth);
+                        
+                        offset += toolDiameter * 0.8;
+                    }
+                }
+                
+                this.rapidMove(startX + width/2, startY + length/2, this.rapidPlane);
+            }
+
+            getGCode() {
+                return this.gCode.join('\n');
+            }
+        }
+
+        // UI Event Handlers
+        document.getElementById('convert-btn').addEventListener('click', function() {
+            const jsCode = document.getElementById('js-code').value;
+            const errorElement = document.getElementById('error-message');
+            
+            try {
+                const func = new Function(`
+                    ${HaasGCodeGenerator.toString()}
+                    ${jsCode}
+                    return generateGCode();
+                `);
+                
+                const gcode = func();
+                document.getElementById('g-code-output').textContent = gcode;
+                errorElement.style.display = 'none';
+            } catch (e) {
+                errorElement.textContent = `Error: ${e.message}`;
+                errorElement.style.display = 'block';
+                console.error(e);
+            }
+        });
+
+        document.getElementById('copy-btn').addEventListener('click', function() {
+            const gcode = document.getElementById('g-code-output').textContent;
+            if (!gcode || gcode === '(G-code will appear here)') {
+                alert('Please generate G-code first');
+                return;
+            }
+            
+            navigator.clipboard.writeText(gcode).then(() => {
+                const originalText = this.textContent;
+                this.textContent = 'Copied!';
+                setTimeout(() => {
+                    this.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                alert('Failed to copy G-code to clipboard');
+            });
+        });
+
+        document.getElementById('download-btn').addEventListener('click', function() {
+            const gcode = document.getElementById('g-code-output').textContent;
+            if (!gcode || gcode === '(G-code will appear here)') {
+                alert('Please generate G-code first');
+                return;
+            }
+            
+            const blob = new Blob([gcode], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `program_${new Date().toISOString().slice(0,10)}.nc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        // Modal functionality
+        const modal = document.getElementById('docs-modal');
+        const btn = document.getElementById('docs-btn');
+        const span = document.getElementsByClassName('close')[0];
+
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+
+        // Tab functionality
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update active tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Example programs
+        const examples = {
+            'face-mill': `// Face milling example
+const partWidth = 5.0;
+const partLength = 3.0;
+const toolDiameter = 0.5;
+
+function generateGCode() {
+    const haas = new HaasGCodeGenerator('0101', 'Face Mill Example');
+    
+    // Program setup
+    haas.programStart();
+    haas.toolChange(1, '1/2" FACE MILL');
+    haas.startPosition(1.0, 1.0, 2000);
+    haas.plungeIntoPart(-0.1, 15);
+    
+    // Face milling operation
+    haas.faceMill(0, 0, partWidth, partLength, -0.125, 0.05, toolDiameter);
+    
+    return haas.programEnd();
+}`,
+
+            'drilling': `// Drilling pattern example
+const partWidth = 4.0;
+const partLength = 6.0;
+const holeSpacing = 1.0;
+
+function generateGCode() {
+    const haas = new HaasGCodeGenerator('0202', 'Drilling Example');
+    
+    // Program setup
+    haas.programStart();
+    haas.toolChange(2, '1/4" DRILL');
+    haas.startPosition(0, 0, 3000);
+    haas.plungeIntoPart(0.1, 5);
+    
+    // Create a grid of holes
+    for (let x = 0.5; x <= partWidth; x += holeSpacing) {
+        for (let y = 0.5; y <= partLength; y += holeSpacing) {
+            haas.drillHole(x, y, 0.1, -0.75, 0.2, 0.5);
+        }
+    }
+    
+    return haas.programEnd();
+}`,
+
+            'contour': `// Contour milling example
+const partRadius = 2.0;
+const toolDiameter = 0.375;
+
+function generateGCode() {
+    const haas = new HaasGCodeGenerator('0303', 'Contour Example');
+    
+    // Program setup
+    haas.programStart();
+    haas.toolChange(3, '3/8" END MILL');
+    haas.startPosition(partRadius, 0, 2500);
+    haas.plungeIntoPart(0.1, 10);
+    
+    // Create circular contour points
+    const points = [];
+    const segments = 36;
+    for (let i = 0; i <= segments; i++) {
+        const angle = (i / segments) * Math.PI * 2;
+        points.push({
+            x: partRadius + partRadius * Math.cos(angle),
+            y: partRadius + partRadius * Math.sin(angle)
+        });
+    }
+    
+    // Mill the contour
+    haas.contourMill(points, -0.5, 0.1, toolDiameter);
+    
+    return haas.programEnd();
+}`,
+
+            'pocket': `// Rectangular pocket example
+const pocketWidth = 3.0;
+const pocketLength = 2.0;
+const toolDiameter = 0.25;
+
+function generateGCode() {
+    const haas = new HaasGCodeGenerator('0404', 'Pocket Example');
+    
+    // Program setup
+    haas.programStart();
+    haas.toolChange(4, '1/4" END MILL');
+    haas.startPosition(pocketWidth/2, pocketLength/2, 3000);
+    haas.plungeIntoPart(0.1, 8);
+    
+    // Mill the pocket
+    haas.pocketMill(0, 0, pocketWidth, pocketLength, -0.375, 0.1, toolDiameter);
+    
+    return haas.programEnd();
+}`
+        };
+
+        // Add event listeners for example buttons
+        document.querySelectorAll('.example-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const exampleName = this.getAttribute('data-example');
+                document.getElementById('js-code').value = examples[exampleName];
+                document.getElementById('error-message').style.display = 'none';
+            });
+        });
+    </script>
+</body>
 </html>
