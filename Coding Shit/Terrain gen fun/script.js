@@ -1,8 +1,8 @@
 let canvas = document.getElementById("c")
 let ctx = canvas.getContext("2d")
-let width = 100
-let height = 100
-let pixelSize = 16
+let width = 400
+let height = 400
+let pixelSize = 2
 let startChance = 0.5
 let itCount = 10
 let grid = []
@@ -102,6 +102,8 @@ function perlinToGrid(e,m) {
   } else if (m < 0.16) {return 13} else
   if (m < 0.33) {return 10} else if (m < 0.66) {return 14} else if (m < 1.1) {return 15}
 }
+
+
 function perlinMask() {
   for (let x = 0;x<width;x++) {
     for (let y = 0; y<height;y++) {
@@ -128,6 +130,8 @@ function perlinMask() {
     }
   }
 }
+
+
 function applyMask() {
   for (let x = 1;x<grid.length;x++) {
     for (let y = 0;y<grid[x].length;y++) {
@@ -180,6 +184,8 @@ function setupGrid() {
     }
   }
 }
+
+
 function removeEdge() {
   for (let x = 0;x<grid.length;x++) {
     for (let y = 0;y<grid[x].length;y++) {
@@ -282,7 +288,7 @@ function removeSmall() {
 // shrubland = 9
 // grassLand = 10
 // temperateDecForest = 11
-// temperateRainForest = 12
+// temperateRainForest = 12 
 // subTropicalDesert = 13
 // tropicalSeasonalForest = 14
 // tropicalRainforest = 15
@@ -291,7 +297,7 @@ function draw() {
   for (x = 1;x<width-1;x++) {
     for (y = 1;y<height-1;y++) {
       if (grid[x][y].val == 0) {
-        ctx.fillStyle = "rgb(0, 255, 194)"
+        ctx.fillStyle = "rgb(3, 0, 168)"
       } 
       if (grid[x][y].val == 1) {
         ctx.fillStyle = "rgb(0, 98, 255)"
@@ -348,13 +354,13 @@ function draw() {
 function start() {
   setup()
   setupGrid()
-  removeEdge()
-  for (let i = 0; i<itCount;i++) {
-    iterate()
-  }
+  // removeEdge()
+  // for (let i = 0; i<itCount;i++) {
+  //   iterate()
+  // }
   // applyMask()
-  removeSmall()
-  // perlinMask()
+  // removeSmall()
+  perlinMask()
   
   // for (let i = 0; i<5;i++) {
   //   iterate()
