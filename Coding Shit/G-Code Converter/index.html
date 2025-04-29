@@ -27,6 +27,25 @@
             text-align: center;
             margin-bottom: 30px;
         }
+        .param-controls {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .param-row {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .param-row label {
+            width: 150px;
+            font-weight: bold;
+        }
+        .param-row select, .param-row input {
+            padding: 5px;
+            width: 200px;
+        }
         .editor-container {
             display: flex;
             gap: 20px;
@@ -203,6 +222,40 @@
     <div class="container">
         <h1>JavaScript to HAAS G-code Converter</h1>
         
+        <div class="param-controls">
+            <h3>Machining Parameters</h3>
+            <div class="param-row">
+                <label for="material-select">Material:</label>
+                <select id="material-select">
+                    <option value="aluminum">Aluminum</option>
+                    <option value="mild_steel">Mild Steel (1018, 1020)</option>
+                </select>
+            </div>
+            <div class="param-row">
+                <label for="tool-material">Tool Material:</label>
+                <select id="tool-material">
+                    <option value="hss">High Speed Steel (HSS)</option>
+                    <option value="carbide">Carbide</option>
+                </select>
+            </div>
+            <div class="param-row">
+                <label for="tool-diameter">Tool Diameter (inches):</label>
+                <input type="number" id="tool-diameter" value="0.5" step="0.01" min="0.01">
+            </div>
+            <div class="param-row">
+                <label for="tool-teeth">Number of Teeth:</label>
+                <input type="number" id="tool-teeth" value="4" min="1">
+            </div>
+            <div class="param-row">
+                <label for="operation-type">Operation Type:</label>
+                <select id="operation-type">
+                    <option value="end_mill">End Mill</option>
+                    <option value="face_mill">Face Mill</option>
+                    <option value="drill">Drill</option>
+                </select>
+            </div>
+        </div>
+
         <div class="error" id="error-message"></div>
         
         <div class="controls">
@@ -443,14 +496,86 @@ function generateGCode() {
                 this.toolOffset = 1;
                 this.workOffset = 'G54';
                 this.decimalPlaces = 4;
+                
+                // Speed and feed data based on provided charts
+                this.machiningData = {
+                    aluminum: {
+                        hss: {
+                            end_mill: { speed: 150, feed_per_tooth: 0.005 },
+                            face_mill: { speed: 200, feed_per_tooth: 0.005 },
+                            drill: { speed: 125, feed_per_rev: 0.010 }
+                        },
+                        carbide: {
+                            end_mill: { speed: 300, feed_per_tooth: 0.005 },
+                            face_mill: { speed: 800, feed_per_tooth: 0.005 },
+                            drill: { speed: 250, feed_per_rev: 0.010 }
+                        }
+                    },
+                    mild_steel: {
+                        hss: {
+                            end_mill: { speed: 90, feed_per_tooth: 0.003 },
+                            face_mill: { speed: 90, feed_per_tooth: 0.003 },
+                            drill: { speed: 80, feed_per_rev: 0.008 }
+                        },
+                        carbide: {
+                            end_mill: { speed: 180, feed_per_tooth: 0.003 },
+                            face_mill: { speed: 350, feed_per_tooth: 0.003 },
+                            drill: { speed: 160, feed_per_rev: 0.008 }
+                        }
+                    }
+                };
             }
-
-            addLine(line = '') {
-                this.gCode.push(line);
+            
+            // Calculate RPM based on material, tool, and diameter
+            calculateRPM(material, toolMaterial, toolDiameter, operationType) {
+                const data = this.machiningData[material][toolMaterial][operationType];
+                const cuttingSpeed = data.speed;
+                // RPM = (4 × Cutting Speed) / Cutter Diameter
+                return Math.round((4 * cuttingSpeed) / toolDiameter);
             }
-
-            comment(text) {
-                this.addLine(`(${text})`);
+            
+            // Calculate feed rate based on operation type
+            calculateFeedRate(material, toolMaterial, toolTeeth, toolDiameter, operationType) {
+                const data = this.machiningData[material][toolMaterial][operationType];
+                
+                if (operationType === 'drill') {
+                    // For drilling, feed is per revolution
+                    const rpm = this.calculateRPM(material, toolMaterial, toolDiameter, operationType);
+                    return data.feed_per_rev * rpm;
+                } else {
+                    // For milling, feed is per tooth
+                    const rpm = this.calculateRPM(material, toolMaterial, toolDiameter, operationType);
+                    return data.feed_per_tooth * toolTeeth * rpm;
+                }
+            }
+            
+            // Updated plungeIntoPart with automatic feed rate
+            plungeIntoPart(z, operationType) {
+                const material = document.getElementById('material-select').value;
+                const toolMaterial = document.getElementById('tool-material').value;
+                const toolDiameter = parseFloat(document.getElementById('tool-diameter').value);
+                const toolTeeth = parseInt(document.getElementById('tool-teeth').value);
+                
+                this.currentFeedRate = this.calculateFeedRate(
+                    material, toolMaterial, toolTeeth, toolDiameter, operationType
+                );
+                
+                this.addLine(`G1 Z${z.toFixed(this.decimalPlaces)} F${this.currentFeedRate.toFixed(this.decimalPlaces)}`);
+            }
+            
+            // Updated startPosition with automatic spindle speed
+            startPosition(x, y) {
+                const material = document.getElementById('material-select').value;
+                const toolMaterial = document.getElementById('tool-material').value;
+                const toolDiameter = parseFloat(document.getElementById('tool-diameter').value);
+                const operationType = document.getElementById('operation-type').value;
+                
+                this.currentSpindleSpeed = this.calculateRPM(
+                    material, toolMaterial, toolDiameter, operationType
+                );
+                
+                this.addLine(`G0 G90 ${this.workOffset} X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} S${this.currentSpindleSpeed} M3`);
+                this.addLine(`G43 H${this.toolOffset} Z${this.rapidPlane.toFixed(this.decimalPlaces)} M8`);
             }
 
             programStart() {
@@ -463,17 +588,6 @@ function generateGCode() {
             toolChange(toolNumber, toolDescription = '') {
                 this.currentTool = toolNumber;
                 this.addLine(`M06 T${toolNumber} (Tool: ${toolDescription})`);
-            }
-
-            startPosition(x, y, spindleSpeed = null) {
-                if (spindleSpeed !== null) this.currentSpindleSpeed = spindleSpeed;
-                this.addLine(`G0 G90 ${this.workOffset} X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} S${this.currentSpindleSpeed} M3`);
-                this.addLine(`G43 H${this.toolOffset} Z${this.rapidPlane.toFixed(this.decimalPlaces)} M8`);
-            }
-
-            plungeIntoPart(z, feedRate = null) {
-                if (feedRate !== null) this.currentFeedRate = feedRate;
-                this.addLine(`G1 Z${z.toFixed(this.decimalPlaces)} F${this.currentFeedRate}`);
             }
 
             programEnd() {
