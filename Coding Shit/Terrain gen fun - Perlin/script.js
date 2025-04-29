@@ -1,6 +1,6 @@
 let canvas = document.getElementById("c")
 let ctx = canvas.getContext("2d")
-let pixelSize = 16
+let pixelSize = 8
 let width = Math.floor(window.innerWidth/pixelSize)
 let height = Math.floor(window.innerHeight/pixelSize)
 let grid = []
@@ -12,10 +12,6 @@ let layer2Mult = 0.5
 let layer3Mult = 0.25
 let cameraX = 500
 let cameraY = 500
-let player = {
-  x: cameraX+(width/2),
-  y: cameraY+(width/2),
-}
 let controls = []
 
 let perlin = {
@@ -76,10 +72,10 @@ function dist(x1,y1,x2,y2) {
 }
 
 function perlinToGrid(e,m) {
-  if (e < 0.015) {return 0} else
-  if (e < 0.05) {return 1} else
-  if (e < 0.07) {return 2} else
-  if (e < 0.1) {return 3} else
+  if (e < 0.05) {return 0} else
+  if (e < 0.1) {return 1} else
+  if (e < 0.12) {return 2} else
+  if (e < 0.15) {return 3} else
   if (e > 0.8) {
     if (m < 0.1) {return 4} else if (m < 0.2) {return 5} else if (m < 0.5) {return 6} else if (m <= 1.1) {return 7} 
   } else if (e > 0.6) {
@@ -92,11 +88,13 @@ function perlinToGrid(e,m) {
 function perlinMask() {
   for (let x = cameraX-1;x<width+cameraX+1;x++) {
     for (let y = cameraY-1; y<height+cameraY+1;y++) {
-      var nx = (x/width + 1 - 0.5)
-      var ny = (y/height + 1 - 0.5)
-      var e = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
-      e = e / (layer1Mult + layer2Mult + layer3Mult)
-      heightMap[x][y] = e
+      if (heightMap[x][y] == 0) {
+        var nx = (x/width + 1 - 0.5)
+        var ny = (y/height + 1 - 0.5)
+        var e = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+        e = e / (layer1Mult + layer2Mult + layer3Mult)
+        heightMap[x][y] = e
+      }
     }
   }
   perlin.seed
@@ -115,6 +113,110 @@ function perlinMask() {
     }
   }
 }
+
+
+
+function perlinMaskUpdate() {
+
+  for (let x = cameraX-1;x<cameraX+width+1;x++) {
+    for (let y = cameraY-1; y<cameraY;y++) {
+      if (heightMap[x][y] == 0) {
+        var nx = (x/width + 1 - 0.5)
+        var ny = (y/height + 1 - 0.5)
+        var e = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+        e = e / (layer1Mult + layer2Mult + layer3Mult)
+        heightMap[x][y] = e
+      }
+    }
+  }
+
+  for (let x = cameraX-1;x<cameraX+width+1;x++) {
+    for (let y = cameraY+height; y<cameraY+height+1;y++) {
+      if (heightMap[x][y] == 0) {
+        var nx = (x/width + 1 - 0.5)
+        var ny = (y/height + 1 - 0.5)
+        var e = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+        e = e / (layer1Mult + layer2Mult + layer3Mult)
+        heightMap[x][y] = e
+      }
+    }
+  }
+
+  for (let x = cameraX-1;x<cameraX;x++) {
+    for (let y = cameraY; y<cameraY+height+1;y++) {
+      if (heightMap[x][y] == 0) {
+        var nx = (x/width + 1 - 0.5)
+        var ny = (y/height + 1 - 0.5)
+        var e = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+        e = e / (layer1Mult + layer2Mult + layer3Mult)
+        heightMap[x][y] = e
+      }
+    }
+  }
+
+  for (let x = cameraX+width;x<cameraX+width+1;x++) {
+    for (let y = cameraY; y<cameraY+height+1;y++) {
+      if (heightMap[x][y] == 0) {
+        var nx = (x/width + 1 - 0.5)
+        var ny = (y/height + 1 - 0.5)
+        var e = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+        e = e / (layer1Mult + layer2Mult + layer3Mult)
+        heightMap[x][y] = e
+      }
+    }
+  }
+
+  perlin.seed
+
+  for (let x = cameraX-1;x<cameraX+width+1;x++) {
+    for (let y = cameraY-1; y<cameraY;y++) {
+      var nx = (x/width + 1 - 0.5)
+      var ny = (y/height + 1 - 0.5)
+      var m = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+      m = m / (layer1Mult + layer2Mult + layer3Mult)
+      moistureMap[x][y] = m
+    }
+  }
+
+  for (let x = cameraX-1;x<cameraX+width+1;x++) {
+    for (let y = cameraY+height; y<cameraY+height+1;y++) {
+      var nx = (x/width + 1 - 0.5)
+      var ny = (y/height + 1 - 0.5)
+      var m = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+      m = m / (layer1Mult + layer2Mult + layer3Mult)
+      moistureMap[x][y] = m
+    }
+  }
+
+  for (let x = cameraX-1;x<cameraX;x++) {
+    for (let y = cameraY-1; y<cameraY+height+1;y++) {
+      var nx = (x/width + 1 - 0.5)
+      var ny = (y/height + 1 - 0.5)
+      var m = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+      m = m / (layer1Mult + layer2Mult + layer3Mult)
+      moistureMap[x][y] = m
+    }
+  }
+
+  for (let x = cameraX+width;x<cameraX+width+1;x++) {
+    for (let y = cameraY-1; y<cameraY+height+1;y++) {
+      var nx = (x/width + 1 - 0.5)
+      var ny = (y/height + 1 - 0.5)
+      var m = layer1Mult * noise(noiseFrequency * nx, noiseFrequency * ny) +  layer2Mult * noise(noiseFrequency * 2 * nx, noiseFrequency * 2 * ny) + layer3Mult * noise(noiseFrequency * 4 * nx, noiseFrequency * 4 * ny)
+      m = m / (layer1Mult + layer2Mult + layer3Mult)
+      moistureMap[x][y] = m
+    }
+  }
+
+  for (let x = cameraX-1;x<width+cameraX+1;x++) {
+    for (let y = cameraY-1; y<height+cameraY+1;y++) {
+      grid[x][y].val = perlinToGrid(heightMap[x][y],moistureMap[x][y])
+    }
+  }
+}
+
+
+
 function setup() {
   canvas.width = width*pixelSize
   canvas.height = height*pixelSize
@@ -223,9 +325,6 @@ function draw() {
       if (grid[x][y].val == 16) {
         ctx.fillStyle = "rgb(19, 66, 0)"
       }
-      if (x === player.x && y === player.y) {
-          ctx.fillStyle = "rgb(0,0,0)"
-      }
       ctx.fillRect((x-cameraX)*pixelSize,(y-cameraY)*pixelSize,pixelSize,pixelSize)
     }
   }
@@ -233,29 +332,25 @@ function draw() {
 
 function west() {
   cameraX--
-  player.x = Math.floor(cameraX+(width/2))
-  perlinMask()
+  perlinMaskUpdate()
   draw()
 }
 
 function east() {
   cameraX++
-  player.x = Math.floor(cameraX+(width/2))
-  perlinMask()
+  perlinMaskUpdate()
   draw()
 }
 
 function north() {
   cameraY--
-  player.y = Math.floor(cameraY+(height/2))
-  perlinMask()
+  perlinMaskUpdate()
   draw()
 }
 
 function south() {
   cameraY++
-  player.y = Math.floor(cameraY+(height/2))
-  perlinMask()
+  perlinMaskUpdate()
   draw()
 }
 
@@ -310,15 +405,14 @@ function loop() {
   
 }
 
-setInterval(loop, 10)
-
+setInterval(loop, 20)
+// window.requestAnimationFrame(loop)
 function start() {
   setup()
   setupGrid()
   removeEdge()
   perlinMask()
-  player.x = Math.floor(cameraX+(width/2))
-  player.y = Math.floor(cameraY+(height/2))
+  
   draw()
 }
 start()

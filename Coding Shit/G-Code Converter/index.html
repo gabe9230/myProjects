@@ -103,17 +103,6 @@
         button:hover {
             background: #2980b9;
         }
-        .examples {
-            margin-top: 30px;
-        }
-        .example-btn {
-            margin-right: 10px;
-            margin-bottom: 10px;
-            background: #27ae60;
-        }
-        .example-btn:hover {
-            background: #219653;
-        }
         .download-btn {
             background: #e67e22;
         }
@@ -173,96 +162,126 @@
         .close:hover {
             color: black;
         }
-        .syntax-table {
+        .param-controls {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .param-row {
+            display: flex;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        .param-row label {
+            width: 150px;
+            font-weight: bold;
+        }
+        .param-row select, .param-row input {
+            padding: 5px;
+            width: 200px;
+        }
+        .tool-table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            margin: 10px 0;
         }
-        .syntax-table th, .syntax-table td {
+        .tool-table th, .tool-table td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
-        .syntax-table th {
-            background-color: #f2f2f2;
-        }
-        .syntax-table tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        code {
-            background-color: #f0f0f0;
-            padding: 2px 4px;
-            border-radius: 3px;
-            font-family: 'Courier New', monospace;
-        }
-        .tab-buttons {
-            display: flex;
-            margin-bottom: 15px;
-        }
-        .tab-btn {
-            padding: 10px 15px;
-            background: #ddd;
-            border: none;
-            cursor: pointer;
-            margin-right: 5px;
-        }
-        .tab-btn.active {
-            background: #3498db;
+        .tool-table th {
+            background-color: #2c3e50;
             color: white;
         }
-        .tab-content {
-            display: none;
+        .tool-table tr:nth-child(even) {
+            background-color: #f9f9f9;
         }
-        .tab-content.active {
-            display: block;
+        .add-tool-btn {
+            background: #27ae60;
+            margin-top: 10px;
+        }
+        .add-tool-btn:hover {
+            background: #219653;
+        }
+        .advanced-params {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
         }
     </style>
+    <script src="haas-gcode-library.js"></script>
 </head>
 <body>
     <div class="container">
         <h1>JavaScript to HAAS G-code Converter</h1>
         
         <div class="param-controls">
-            <h3>Machining Parameters</h3>
             <div class="param-row">
                 <label for="material-select">Material:</label>
                 <select id="material-select">
                     <option value="aluminum">Aluminum</option>
-                    <option value="mild_steel">Mild Steel (1018, 1020)</option>
+                    <option value="brass">Brass</option>
+                    <option value="bronze">Bronze</option>
+                    <option value="cast_iron">Cast Iron</option>
+                    <option value="free_machining_steel">Free Machining Steel</option>
+                    <option value="low_carbon_steel">Low Carbon Steel</option>
+                    <option value="alloy_steel">Alloy Steel</option>
+                    <option value="stainless_steel">Stainless Steel</option>
+                    <option value="tool_steel">Tool Steel</option>
+                    <option value="copper">Copper</option>
                 </select>
             </div>
+            
             <div class="param-row">
-                <label for="tool-material">Tool Material:</label>
-                <select id="tool-material">
-                    <option value="hss">High Speed Steel (HSS)</option>
-                    <option value="carbide">Carbide</option>
+                <label for="work-offset">Work Offset:</label>
+                <select id="work-offset">
+                    <option value="G54">G54</option>
+                    <option value="G55">G55</option>
+                    <option value="G56">G56</option>
+                    <option value="G57">G57</option>
+                    <option value="G58">G58</option>
+                    <option value="G59">G59</option>
                 </select>
             </div>
+            
             <div class="param-row">
-                <label for="tool-diameter">Tool Diameter (inches):</label>
-                <input type="number" id="tool-diameter" value="0.5" step="0.01" min="0.01">
-            </div>
-            <div class="param-row">
-                <label for="tool-teeth">Number of Teeth:</label>
-                <input type="number" id="tool-teeth" value="4" min="1">
-            </div>
-            <div class="param-row">
-                <label for="operation-type">Operation Type:</label>
-                <select id="operation-type">
-                    <option value="end_mill">End Mill</option>
-                    <option value="face_mill">Face Mill</option>
-                    <option value="drill">Drill</option>
+                <label for="coolant-mode">Coolant Mode:</label>
+                <select id="coolant-mode">
+                    <option value="M8">Flood (M8)</option>
+                    <option value="M7">Mist (M7)</option>
+                    <option value="M9">Off (M9)</option>
                 </select>
             </div>
+            
+            <h3>Tool Library</h3>
+            <table class="tool-table" id="tool-table">
+                <thead>
+                    <tr>
+                        <th>Tool #</th>
+                        <th>Type</th>
+                        <th>Material</th>
+                        <th>Diameter</th>
+                        <th>Teeth</th>
+                        <th>Tool Material</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="tool-table-body">
+                    <!-- Tools will be added here -->
+                </tbody>
+            </table>
+            <button id="add-tool-btn" class="add-tool-btn">Add Tool</button>
         </div>
-
+        
         <div class="error" id="error-message"></div>
         
         <div class="controls">
             <button id="convert-btn">Convert to G-code</button>
             <button id="copy-btn" class="copy-btn">Copy G-code</button>
             <button id="download-btn" class="download-btn">Download G-code</button>
-            <button id="docs-btn" class="docs-btn">View Syntax Documentation</button>
+            <a href="haas-gcode-documentation.html" class="docs-btn" style="text-decoration: none; color: white; display: inline-block; padding: 10px 20px;">View Syntax Documentation</a>
         </div>
         
         <div class="editor-container">
@@ -272,19 +291,24 @@
 const partWidth = 4.0;
 const partLength = 6.0;
 const holeDiameter = 0.5;
-const toolDiameter = 0.375;
 
 function generateGCode() {
     const haas = new HaasGCodeGenerator('0020', 'Sample Part');
     
     // Program setup
     haas.programStart();
-    haas.toolChange(1, '1/2" END MILL');
-    haas.startPosition(1.0, 1.0, 2500);
-    haas.plungeIntoPart(-0.1, 10);
+    
+    // Tool 1 - Face mill
+    haas.toolChange(1);
+    haas.startPosition(1.0, 1.0);
+    haas.plungeIntoPart(-0.1, 'face_mill');
     
     // Face milling operation
-    haas.faceMill(0, 0, partWidth, partLength, -0.1, 0.05, toolDiameter);
+    haas.faceMill(0, 0, partWidth, partLength, -0.1, 0.05);
+    
+    // Tool 2 - Drill
+    haas.toolChange(2);
+    haas.plungeIntoPart(0.1, 'drill');
     
     // Drill holes
     const holes = [
@@ -294,7 +318,6 @@ function generateGCode() {
         {x: 0.5, y: partLength-0.5}
     ];
     
-    haas.plungeIntoPart(0.1); // Return to safe plane
     holes.forEach(hole => {
         haas.drillHole(hole.x, hole.y, 0.1, -0.6, 0.1, 0.5);
     });
@@ -308,395 +331,91 @@ function generateGCode() {
                 <pre id="g-code-output">(G-code will appear here)</pre>
             </div>
         </div>
-        
-        <div class="examples">
-            <h3>Example Programs:</h3>
-            <button class="example-btn" data-example="face-mill">Face Milling</button>
-            <button class="example-btn" data-example="drilling">Drilling Pattern</button>
-            <button class="example-btn" data-example="contour">Contour Milling</button>
-            <button class="example-btn" data-example="pocket">Rectangular Pocket</button>
-        </div>
     </div>
 
-    <!-- Documentation Modal -->
-    <div id="docs-modal" class="modal">
+    <!-- Add Tool Modal -->
+    <div id="tool-modal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>HAAS G-code Generator Syntax Documentation</h2>
+            <h2>Add New Tool</h2>
             
-            <div class="tab-buttons">
-                <button class="tab-btn active" data-tab="overview">Overview</button>
-                <button class="tab-btn" data-tab="program-structure">Program Structure</button>
-                <button class="tab-btn" data-tab="movement">Movement</button>
-                <button class="tab-btn" data-tab="operations">Machining Operations</button>
+            <div class="param-row">
+                <label for="tool-number">Tool Number:</label>
+                <select id="tool-number">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                </select>
             </div>
             
-            <div id="overview" class="tab-content active">
-                <h3>Overview</h3>
-                <p>This converter allows you to write machining operations in JavaScript that get converted to HAAS-compatible G-code. The generated code follows standard HAAS program structure:</p>
-                <pre>
-%
-Oxxxx (PROGRAM NAME)
-G17 G40 G80 G54 G20
-G28 G91 G0 X0 Y0 Z0
-M06 T1 (TOOL DESCRIPTION)
-G0 G90 G54 X_ Y_ S_ M3
-G43 H1 Z0.1 M8
-G1 Z_ F_
-
-[YOUR MACHINING OPERATIONS]
-
-G40 G80
-G0 Z2.0 M9
-G28 G91 G0 X0 Y0 Z0 M5
-M30
-%</pre>
-                <p>All coordinates are in inches (G20) by default. The generator maintains proper tool offsets, coolant control, and safety moves.</p>
+            <div class="param-row">
+                <label for="tool-type">Tool Type:</label>
+                <select id="tool-type">
+                    <option value="end_mill">End Mill</option>
+                    <option value="face_mill">Face Mill</option>
+                    <option value="drill">Drill</option>
+                    <option value="tap">Tap</option>
+                    <option value="thread_mill">Thread Mill</option>
+                </select>
             </div>
             
-            <div id="program-structure" class="tab-content">
-                <h3>Program Structure Methods</h3>
-                <table class="syntax-table">
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                        <th>Example</th>
-                    </tr>
-                    <tr>
-                        <td><code>programStart()</code></td>
-                        <td>None</td>
-                        <td>Initializes program with safety lines and header</td>
-                        <td><code>haas.programStart();</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>programEnd()</code></td>
-                        <td>None</td>
-                        <td>Ends program with safety moves and M30</td>
-                        <td><code>return haas.programEnd();</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>toolChange()</code></td>
-                        <td>toolNumber, description</td>
-                        <td>Performs tool change with comment</td>
-                        <td><code>haas.toolChange(1, '1/2" END MILL');</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>startPosition()</code></td>
-                        <td>x, y, [spindleSpeed]</td>
-                        <td>Moves to start position, starts spindle</td>
-                        <td><code>haas.startPosition(1.0, 1.0, 2500);</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>plungeIntoPart()</code></td>
-                        <td>z, [feedRate]</td>
-                        <td>Plunges tool into material at feed rate</td>
-                        <td><code>haas.plungeIntoPart(-0.1, 10);</code></td>
-                    </tr>
-                </table>
+            <div class="param-row">
+                <label for="tool-material">Tool Material:</label>
+                <select id="tool-material">
+                    <option value="hss">High Speed Steel (HSS)</option>
+                    <option value="carbide">Carbide</option>
+                </select>
             </div>
             
-            <div id="movement" class="tab-content">
-                <h3>Movement Methods</h3>
-                <table class="syntax-table">
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                        <th>Example</th>
-                    </tr>
-                    <tr>
-                        <td><code>rapidMove()</code></td>
-                        <td>x, y, z</td>
-                        <td>G00 rapid movement to position</td>
-                        <td><code>haas.rapidMove(2.0, 3.0, 0.1);</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>linearMove()</code></td>
-                        <td>x, y, z, [feedRate]</td>
-                        <td>G01 linear move at feed rate</td>
-                        <td><code>haas.linearMove(2.0, 3.0, -0.1, 15);</code></td>
-                    </tr>
-                </table>
+            <div class="param-row">
+                <label for="tool-diameter">Diameter (inches):</label>
+                <input type="number" id="tool-diameter" value="0.5" step="0.01" min="0.01">
             </div>
             
-            <div id="operations" class="tab-content">
-                <h3>Machining Operations</h3>
-                <table class="syntax-table">
-                    <tr>
-                        <th>Method</th>
-                        <th>Parameters</th>
-                        <th>Description</th>
-                        <th>Example</th>
-                    </tr>
-                    <tr>
-                        <td><code>drillHole()</code></td>
-                        <td>x, y, startZ, depth, [peckDepth], [dwell]</td>
-                        <td>Drills hole (G81/G83) with optional pecking</td>
-                        <td><code>haas.drillHole(1.0, 1.0, 0.1, -0.5, 0.1, 0.5);</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>faceMill()</code></td>
-                        <td>startX, startY, width, length, depth, stepDown, toolDiameter</td>
-                        <td>Faces rectangular area</td>
-                        <td><code>haas.faceMill(0, 0, 5.0, 3.0, -0.1, 0.05, 0.5);</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>contourMill()</code></td>
-                        <td>contourPoints, depth, stepDown, toolDiameter</td>
-                        <td>Mills contour defined by points</td>
-                        <td><code>haas.contourMill(points, -0.5, 0.1, 0.375);</code></td>
-                    </tr>
-                    <tr>
-                        <td><code>pocketMill()</code></td>
-                        <td>startX, startY, width, length, depth, stepDown, toolDiameter</td>
-                        <td>Mills rectangular pocket</td>
-                        <td><code>haas.pocketMill(1.0, 1.0, 3.0, 2.0, -0.375, 0.1, 0.25);</code></td>
-                    </tr>
-                </table>
-                
-                <h3>JavaScript Program Structure</h3>
-                <p>Your program must define a <code>generateGCode()</code> function that returns the result of <code>programEnd()</code>:</p>
-                <pre>
-// Define parameters
-const width = 5.0;
-const toolDiameter = 0.5;
-
-function generateGCode() {
-    const haas = new HaasGCodeGenerator('0101', 'My Part');
-    
-    // Setup
-    haas.programStart();
-    haas.toolChange(1, '1/2" END MILL');
-    haas.startPosition(1.0, 1.0, 2500);
-    haas.plungeIntoPart(-0.1, 10);
-    
-    // Operations
-    haas.faceMill(0, 0, width, width, -0.1, 0.05, toolDiameter);
-    
-    // Return generated code
-    return haas.programEnd();
-}</pre>
+            <div class="param-row">
+                <label for="tool-teeth">Number of Teeth:</label>
+                <input type="number" id="tool-teeth" value="4" min="1">
             </div>
+            
+            <div class="advanced-params" id="tap-params" style="display:none;">
+                <div class="param-row">
+                    <label for="tap-pitch">Tap Pitch (TPI):</label>
+                    <input type="number" id="tap-pitch" value="20" min="1">
+                </div>
+            </div>
+            
+            <div class="advanced-params" id="thread-mill-params" style="display:none;">
+                <div class="param-row">
+                    <label for="thread-mill-direction">Thread Direction:</label>
+                    <select id="thread-mill-direction">
+                        <option value="right">Right Hand</option>
+                        <option value="left">Left Hand</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button id="save-tool-btn" class="add-tool-btn">Save Tool</button>
         </div>
     </div>
 
     <script>
-        // G-code generator class
-        class HaasGCodeGenerator {
-            constructor(programNumber = '0020', programName = 'Project Number') {
-                this.gCode = [];
-                this.programNumber = programNumber;
-                this.programName = programName;
-                this.currentTool = 1;
-                this.currentSpindleSpeed = 2000;
-                this.currentFeedRate = 10;
-                this.safeZ = 2.0;
-                this.rapidPlane = 0.1;
-                this.toolOffset = 1;
-                this.workOffset = 'G54';
-                this.decimalPlaces = 4;
-                
-                // Speed and feed data based on provided charts
-                this.machiningData = {
-                    aluminum: {
-                        hss: {
-                            end_mill: { speed: 150, feed_per_tooth: 0.005 },
-                            face_mill: { speed: 200, feed_per_tooth: 0.005 },
-                            drill: { speed: 125, feed_per_rev: 0.010 }
-                        },
-                        carbide: {
-                            end_mill: { speed: 300, feed_per_tooth: 0.005 },
-                            face_mill: { speed: 800, feed_per_tooth: 0.005 },
-                            drill: { speed: 250, feed_per_rev: 0.010 }
-                        }
-                    },
-                    mild_steel: {
-                        hss: {
-                            end_mill: { speed: 90, feed_per_tooth: 0.003 },
-                            face_mill: { speed: 90, feed_per_tooth: 0.003 },
-                            drill: { speed: 80, feed_per_rev: 0.008 }
-                        },
-                        carbide: {
-                            end_mill: { speed: 180, feed_per_tooth: 0.003 },
-                            face_mill: { speed: 350, feed_per_tooth: 0.003 },
-                            drill: { speed: 160, feed_per_rev: 0.008 }
-                        }
-                    }
-                };
-            }
-            
-            // Calculate RPM based on material, tool, and diameter
-            calculateRPM(material, toolMaterial, toolDiameter, operationType) {
-                const data = this.machiningData[material][toolMaterial][operationType];
-                const cuttingSpeed = data.speed;
-                // RPM = (4 × Cutting Speed) / Cutter Diameter
-                return Math.round((4 * cuttingSpeed) / toolDiameter);
-            }
-            
-            // Calculate feed rate based on operation type
-            calculateFeedRate(material, toolMaterial, toolTeeth, toolDiameter, operationType) {
-                const data = this.machiningData[material][toolMaterial][operationType];
-                
-                if (operationType === 'drill') {
-                    // For drilling, feed is per revolution
-                    const rpm = this.calculateRPM(material, toolMaterial, toolDiameter, operationType);
-                    return data.feed_per_rev * rpm;
-                } else {
-                    // For milling, feed is per tooth
-                    const rpm = this.calculateRPM(material, toolMaterial, toolDiameter, operationType);
-                    return data.feed_per_tooth * toolTeeth * rpm;
-                }
-            }
-            
-            // Updated plungeIntoPart with automatic feed rate
-            plungeIntoPart(z, operationType) {
-                const material = document.getElementById('material-select').value;
-                const toolMaterial = document.getElementById('tool-material').value;
-                const toolDiameter = parseFloat(document.getElementById('tool-diameter').value);
-                const toolTeeth = parseInt(document.getElementById('tool-teeth').value);
-                
-                this.currentFeedRate = this.calculateFeedRate(
-                    material, toolMaterial, toolTeeth, toolDiameter, operationType
-                );
-                
-                this.addLine(`G1 Z${z.toFixed(this.decimalPlaces)} F${this.currentFeedRate.toFixed(this.decimalPlaces)}`);
-            }
-            
-            // Updated startPosition with automatic spindle speed
-            startPosition(x, y) {
-                const material = document.getElementById('material-select').value;
-                const toolMaterial = document.getElementById('tool-material').value;
-                const toolDiameter = parseFloat(document.getElementById('tool-diameter').value);
-                const operationType = document.getElementById('operation-type').value;
-                
-                this.currentSpindleSpeed = this.calculateRPM(
-                    material, toolMaterial, toolDiameter, operationType
-                );
-                
-                this.addLine(`G0 G90 ${this.workOffset} X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} S${this.currentSpindleSpeed} M3`);
-                this.addLine(`G43 H${this.toolOffset} Z${this.rapidPlane.toFixed(this.decimalPlaces)} M8`);
-            }
-
-            programStart() {
-                this.addLine('%');
-                this.addLine(`O${this.programNumber}_ (${this.programName})`);
-                this.addLine('G17 G40 G80 G54 G20');
-                this.addLine('G28 G91 G0 X0 Y0 Z0');
-            }
-
-            toolChange(toolNumber, toolDescription = '') {
-                this.currentTool = toolNumber;
-                this.addLine(`M06 T${toolNumber} (Tool: ${toolDescription})`);
-            }
-
-            programEnd() {
-                this.addLine('G40 G80');
-                this.addLine(`G0 Z${this.safeZ.toFixed(this.decimalPlaces)} M9`);
-                this.addLine('G28 G91 G0 X0 Y0 Z0 M5');
-                this.addLine('M30');
-                this.addLine('%');
-                return this.getGCode();
-            }
-
-            rapidMove(x, y, z) {
-                this.addLine(`G0 X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} Z${z.toFixed(this.decimalPlaces)}`);
-            }
-
-            linearMove(x, y, z, feedRate = null) {
-                if (feedRate !== null) this.currentFeedRate = feedRate;
-                this.addLine(`G1 X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} Z${z.toFixed(this.decimalPlaces)} F${this.currentFeedRate}`);
-            }
-
-            drillHole(x, y, startZ, depth, peckDepth = 0, dwell = 0) {
-                this.comment(`Drilling hole at X${x} Y${y}`);
-                this.rapidMove(x, y, this.rapidPlane);
-                this.plungeIntoPart(startZ);
-                
-                if (peckDepth > 0) {
-                    this.addLine(`G83 X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} Z${depth.toFixed(this.decimalPlaces)} Q${peckDepth.toFixed(this.decimalPlaces)} R${startZ.toFixed(this.decimalPlaces)} P${dwell.toFixed(2)} F${this.currentFeedRate}`);
-                } else {
-                    this.addLine(`G81 X${x.toFixed(this.decimalPlaces)} Y${y.toFixed(this.decimalPlaces)} Z${depth.toFixed(this.decimalPlaces)} R${startZ.toFixed(this.decimalPlaces)} F${this.currentFeedRate}${dwell > 0 ? ` P${dwell.toFixed(2)}` : ''}`);
-                }
-                
-                this.addLine('G80');
-                this.rapidMove(x, y, this.rapidPlane);
-            }
-
-            faceMill(startX, startY, width, length, depth, stepDown, toolDiameter) {
-                this.comment(`Facing operation: ${width}x${length} area to depth ${depth}`);
-                const radius = toolDiameter / 2;
-                const passes = Math.ceil(Math.abs(depth) / Math.abs(stepDown));
-                
-                for (let pass = 1; pass <= passes; pass++) {
-                    const currentDepth = Math.min(pass * stepDown, depth);
-                    this.comment(`Pass ${pass} at depth ${currentDepth.toFixed(this.decimalPlaces)}`);
-                    
-                    for (let y = startY + radius; y <= startY + length - radius; y += toolDiameter * 0.8) {
-                        this.rapidMove(startX + radius, y, this.rapidPlane);
-                        this.linearMove(startX + radius, y, currentDepth);
-                        this.linearMove(startX + width - radius, y, currentDepth);
-                        this.rapidMove(startX + width - radius, y, this.rapidPlane);
-                    }
-                }
-                
-                this.rapidMove(startX + radius, startY + radius, this.rapidPlane);
-            }
-
-            contourMill(contourPoints, depth, stepDown, toolDiameter) {
-                this.comment(`Contour milling at depth ${depth}`);
-                const radius = toolDiameter / 2;
-                const passes = Math.ceil(Math.abs(depth) / Math.abs(stepDown));
-                
-                for (let pass = 1; pass <= passes; pass++) {
-                    const currentDepth = Math.min(pass * stepDown, depth);
-                    this.comment(`Pass ${pass} at depth ${currentDepth.toFixed(this.decimalPlaces)}`);
-                    
-                    const firstPoint = contourPoints[0];
-                    this.rapidMove(firstPoint.x + radius, firstPoint.y + radius, this.rapidPlane);
-                    this.linearMove(firstPoint.x + radius, firstPoint.y + radius, currentDepth);
-                    
-                    for (let i = 1; i < contourPoints.length; i++) {
-                        const point = contourPoints[i];
-                        this.linearMove(point.x + radius, point.y + radius, currentDepth);
-                    }
-                    
-                    this.linearMove(firstPoint.x + radius, firstPoint.y + radius, currentDepth);
-                    this.rapidMove(firstPoint.x + radius, firstPoint.y + radius, this.rapidPlane);
-                }
-            }
-
-            pocketMill(startX, startY, width, length, depth, stepDown, toolDiameter) {
-                this.comment(`Pocket milling: ${width}x${length} to depth ${depth}`);
-                const radius = toolDiameter / 2;
-                const passes = Math.ceil(Math.abs(depth) / Math.abs(stepDown));
-                
-                for (let pass = 1; pass <= passes; pass++) {
-                    const currentDepth = Math.min(pass * stepDown, depth);
-                    this.comment(`Pass ${pass} at depth ${currentDepth.toFixed(this.decimalPlaces)}`);
-                    
-                    let offset = 0;
-                    while (offset < width/2 - radius && offset < length/2 - radius) {
-                        this.rapidMove(startX + radius + offset, startY + radius + offset, this.rapidPlane);
-                        this.linearMove(startX + radius + offset, startY + radius + offset, currentDepth);
-                        
-                        this.linearMove(startX + width - radius - offset, startY + radius + offset, currentDepth);
-                        this.linearMove(startX + width - radius - offset, startY + length - radius - offset, currentDepth);
-                        this.linearMove(startX + radius + offset, startY + length - radius - offset, currentDepth);
-                        this.linearMove(startX + radius + offset, startY + radius + offset, currentDepth);
-                        
-                        offset += toolDiameter * 0.8;
-                    }
-                }
-                
-                this.rapidMove(startX + width/2, startY + length/2, this.rapidPlane);
-            }
-
-            getGCode() {
-                return this.gCode.join('\n');
-            }
-        }
-
         // UI Event Handlers
         document.getElementById('convert-btn').addEventListener('click', function() {
             const jsCode = document.getElementById('js-code').value;
@@ -756,146 +475,46 @@ function generateGCode() {
             URL.revokeObjectURL(url);
         });
 
-        // Modal functionality
-        const modal = document.getElementById('docs-modal');
-        const btn = document.getElementById('docs-btn');
-        const span = document.getElementsByClassName('close')[0];
+        // Tool management
+        const toolModal = document.getElementById('tool-modal');
+        const addToolBtn = document.getElementById('add-tool-btn');
+        const saveToolBtn = document.getElementById('save-tool-btn');
+        const closeToolModal = document.querySelector('#tool-modal .close');
+        const toolTypeSelect = document.getElementById('tool-type');
 
-        btn.onclick = function() {
-            modal.style.display = "block";
-        }
+        // Show/hide advanced parameters based on tool type
+        toolTypeSelect.addEventListener('change', function() {
+            document.getElementById('tap-params').style.display = 
+                this.value === 'tap' ? 'block' : 'none';
+            document.getElementById('thread-mill-params').style.display = 
+                this.value === 'thread_mill' ? 'block' : 'none';
+        });
 
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
+        addToolBtn.addEventListener('click', function() {
+            toolModal.style.display = 'block';
+        });
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
+        closeToolModal.addEventListener('click', function() {
+            toolModal.style.display = 'none';
+        });
+
+        saveToolBtn.addEventListener('click', function() {
+            const toolNumber = document.getElementById('tool-number').value;
+            const toolType = document.getElementById('tool-type').value;
+            const toolMaterial = document.getElementById('tool-material').value;
+            const toolDiameter = parseFloat(document.getElementById('tool-diameter').value);
+            const toolTeeth = parseInt(document.getElementById('tool-teeth').value);
+            
+            // Additional parameters for special tools
+            const additionalParams = {};
+            if (toolType === 'tap') {
+                additionalParams.pitch = 1 / parseFloat(document.getElementById('tap-pitch').value);
+            } else if (toolType === 'thread_mill') {
+                additionalParams.threadDirection = document.getElementById('thread-mill-direction').value;
             }
-        }
-
-        // Tab functionality
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const tabId = this.getAttribute('data-tab');
-                
-                // Update active tab button
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                // Update active tab content
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
-                document.getElementById(tabId).classList.add('active');
-            });
-        });
-
-        // Example programs
-        const examples = {
-            'face-mill': `// Face milling example
-const partWidth = 5.0;
-const partLength = 3.0;
-const toolDiameter = 0.5;
-
-function generateGCode() {
-    const haas = new HaasGCodeGenerator('0101', 'Face Mill Example');
-    
-    // Program setup
-    haas.programStart();
-    haas.toolChange(1, '1/2" FACE MILL');
-    haas.startPosition(1.0, 1.0, 2000);
-    haas.plungeIntoPart(-0.1, 15);
-    
-    // Face milling operation
-    haas.faceMill(0, 0, partWidth, partLength, -0.125, 0.05, toolDiameter);
-    
-    return haas.programEnd();
-}`,
-
-            'drilling': `// Drilling pattern example
-const partWidth = 4.0;
-const partLength = 6.0;
-const holeSpacing = 1.0;
-
-function generateGCode() {
-    const haas = new HaasGCodeGenerator('0202', 'Drilling Example');
-    
-    // Program setup
-    haas.programStart();
-    haas.toolChange(2, '1/4" DRILL');
-    haas.startPosition(0, 0, 3000);
-    haas.plungeIntoPart(0.1, 5);
-    
-    // Create a grid of holes
-    for (let x = 0.5; x <= partWidth; x += holeSpacing) {
-        for (let y = 0.5; y <= partLength; y += holeSpacing) {
-            haas.drillHole(x, y, 0.1, -0.75, 0.2, 0.5);
-        }
-    }
-    
-    return haas.programEnd();
-}`,
-
-            'contour': `// Contour milling example
-const partRadius = 2.0;
-const toolDiameter = 0.375;
-
-function generateGCode() {
-    const haas = new HaasGCodeGenerator('0303', 'Contour Example');
-    
-    // Program setup
-    haas.programStart();
-    haas.toolChange(3, '3/8" END MILL');
-    haas.startPosition(partRadius, 0, 2500);
-    haas.plungeIntoPart(0.1, 10);
-    
-    // Create circular contour points
-    const points = [];
-    const segments = 36;
-    for (let i = 0; i <= segments; i++) {
-        const angle = (i / segments) * Math.PI * 2;
-        points.push({
-            x: partRadius + partRadius * Math.cos(angle),
-            y: partRadius + partRadius * Math.sin(angle)
-        });
-    }
-    
-    // Mill the contour
-    haas.contourMill(points, -0.5, 0.1, toolDiameter);
-    
-    return haas.programEnd();
-}`,
-
-            'pocket': `// Rectangular pocket example
-const pocketWidth = 3.0;
-const pocketLength = 2.0;
-const toolDiameter = 0.25;
-
-function generateGCode() {
-    const haas = new HaasGCodeGenerator('0404', 'Pocket Example');
-    
-    // Program setup
-    haas.programStart();
-    haas.toolChange(4, '1/4" END MILL');
-    haas.startPosition(pocketWidth/2, pocketLength/2, 3000);
-    haas.plungeIntoPart(0.1, 8);
-    
-    // Mill the pocket
-    haas.pocketMill(0, 0, pocketWidth, pocketLength, -0.375, 0.1, toolDiameter);
-    
-    return haas.programEnd();
-}`
-        };
-
-        // Add event listeners for example buttons
-        document.querySelectorAll('.example-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const exampleName = this.getAttribute('data-example');
-                document.getElementById('js-code').value = examples[exampleName];
-                document.getElementById('error-message').style.display = 'none';
-            });
+            
+            toolLibrary.addTool(toolNumber, toolType, toolMaterial, toolDiameter, toolTeeth, additionalParams);
+            toolModal.style.display = 'none';
         });
     </script>
 </body>
