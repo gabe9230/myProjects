@@ -1,7 +1,409 @@
 <!DOCTYPE html>
 <html>
-    <body>
-        <canvas id="c"></canvas>
-        <script src="Script.js"></script>
-    </body>
+<head>
+    <title>Optimized Infinite 3D Heightmap</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            font-family: Arial, sans-serif;
+        }
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            background: rgba(0,0,0,0.7);
+            padding: 20px;
+            border-radius: 10px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .progress-bar {
+            width: 200px;
+            height: 20px;
+            background: #333;
+            margin: 10px auto;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background: #4CAF50;
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">WASD to move | Mouse wheel to zoom | Right-click drag to rotate</div>
+    <div id="loading">
+        <h2>Generating Terrain</h2>
+        <div class="progress-bar"><div class="progress" id="progress"></div></div>
+        <div id="status">Initializing...</div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script>
+        // Configuration
+        const GRID_SIZE = 1;
+        const CHUNK_SIZE = 32;
+        const GENERATION_SCALE = 0.005;
+        const HEIGHT_SCALE = CHUNK_SIZE/2;
+        const INITIAL_ZOOM = CHUNK_SIZE*2;
+        const VIEW_DISTANCE = 3; // Chunks in each direction
+        const LOD_LEVELS = [
+            { distance: CHUNK_SIZE*1.5, resolution: 8 },
+            { distance: CHUNK_SIZE*3, resolution: 16 },
+            { distance: Infinity, resolution: 32 }
+        ];
+
+        // Three.js setup
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x87ceeb);
+        scene.fog = new THREE.FogExp2(0x87ceeb, 0.002);
+        
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth / window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
+
+        // RTS Camera Controls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enablePan = true;
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.screenSpacePanning = false;
+        controls.maxPolarAngle = Math.PI * 0.8;
+        controls.minDistance = CHUNK_SIZE;
+        controls.maxDistance = CHUNK_SIZE*4;
+        
+        // Set initial camera position
+        camera.position.set(0, INITIAL_ZOOM, 0);
+        controls.target.set(0, 0, 0);
+        controls.update();
+
+        // Create Web Worker for chunk generation
+        const worker = new Worker(URL.createObjectURL(new Blob([`
+            // Perlin Noise implementation
+            class FastPerlin {
+                constructor() {
+                    this.perm = new Uint8Array(512);
+                    this.seed();
+                }
+                
+                seed() {
+                    const p = new Uint8Array(256);
+                    for (let i = 0; i < 256; i++) p[i] = i;
+                    for (let i = 255; i > 0; i--) {
+                        const j = Math.floor(Math.random() * (i + 1));
+                        [p[i], p[j]] = [p[j], p[i]];
+                    }
+                    for (let i = 0; i < 512; i++) this.perm[i] = p[i & 255];
+                }
+                
+                noise(x, y) {
+                    const X = Math.floor(x) & 255;
+                    const Y = Math.floor(y) & 255;
+                    x -= Math.floor(x);
+                    y -= Math.floor(y);
+                    
+                    const u = x * x * x * (x * (x * 6 - 15) + 10);
+                    const v = y * y * y * (y * (y * 6 - 15) + 10);
+                    
+                    const a = this.perm[X] + Y;
+                    const b = this.perm[X+1] + Y;
+                    
+                    const grad = (hash, x, y) => {
+                        const h = hash & 15;
+                        const u = h < 8 ? x : y;
+                        const v = h < 4 ? y : h === 12 || h === 14 ? x : 0;
+                        return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
+                    };
+                    
+                    return this.lerp(
+                        this.lerp(grad(this.perm[a], x, y), 
+                        grad(this.perm[b], x-1, y), u),
+                        this.lerp(grad(this.perm[a+1], x, y-1), 
+                        grad(this.perm[b+1], x-1, y-1), u), v
+                    );
+                }
+                
+                lerp(a, b, t) { return a + t * (b - a); }
+            }
+
+            const perlin = new FastPerlin();
+
+            function applyScale(x) {
+                let y = x*1.5;
+                if (y < -1) y = -1;
+                if (y > 1) y = 1;
+                return y;
+            }
+
+            // Message handler
+            self.onmessage = function(e) {
+                const { chunkX, chunkZ, resolution, GENERATION_SCALE, CHUNK_SIZE, HEIGHT_SCALE } = e.data;
+                const size = CHUNK_SIZE / resolution;
+                const worldOffsetX = chunkX * CHUNK_SIZE;
+                const worldOffsetZ = chunkZ * CHUNK_SIZE;
+                
+                const positions = [];
+                const colors = [];
+                const indices = [];
+                let idx = 0;
+                
+                for (let z = 0; z <= CHUNK_SIZE; z += size) {
+                    for (let x = 0; x <= CHUNK_SIZE; x += size) {
+                        const wx = worldOffsetX + x;
+                        const wz = worldOffsetZ + z;
+                        let h = perlin.noise(wx * GENERATION_SCALE, wz * GENERATION_SCALE);
+                        h += 0.5 * perlin.noise(wx * GENERATION_SCALE * 2, wz * GENERATION_SCALE * 2);
+                        h = applyScale(h);
+                        
+                        positions.push(x, z, h * HEIGHT_SCALE);
+                        
+                        // Terrain color
+                        const normalizedHeight = (h + 1) / 2;
+                        let r, g, b;
+                        if (normalizedHeight < 0.2) { r=3; g=0; b=168; }
+                        else if (normalizedHeight < 0.25) { r=0; g=98; b=255; }
+                        else if (normalizedHeight < 0.4) { r=230; g=211; b=108; }
+                        else if (normalizedHeight < 0.7) { r=59; g=194; b=54; }
+                        else if (normalizedHeight < 0.9) { r=105; g=99; b=79; }
+                        else { r=200; g=200; b=200; }
+                        
+                        colors.push(r/255, g/255, b/255);
+                        
+                        if (x > 0 && z > 0) {
+                            const rowLength = (CHUNK_SIZE/size) + 1;
+                            const current = idx;
+                            const left = current - 1;
+                            const top = current - rowLength;
+                            const topLeft = top - 1;
+                            
+                            indices.push(topLeft, left, current);
+                            indices.push(topLeft, current, top);
+                        }
+                        
+                        idx++;
+                    }
+                }
+                
+                self.postMessage({
+                    chunkX, chunkZ, resolution,
+                    positions, colors, indices
+                }, [positions.buffer, colors.buffer, indices.buffer]);
+            };
+        `], { type: 'text/javascript' })));
+
+        // Chunk management
+        const chunks = new Map();
+        const activeChunks = new Set();
+        const loadingQueue = [];
+        let workersBusy = 0;
+        const MAX_WORKERS = 4;
+        
+        function chunkKey(x, z) {
+            return `${x},${z}`;
+        }
+
+        // Create a chunk from generated data
+        function createChunkFromData(data) {
+            const { chunkX, chunkZ, resolution, positions, colors, indices } = data;
+            const key = chunkKey(chunkX, chunkZ);
+            
+            const geometry = new THREE.BufferGeometry();
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            geometry.setIndex(indices);
+            geometry.computeVertexNormals();
+            
+            const material = new THREE.MeshStandardMaterial({
+                vertexColors: true,
+                flatShading: false,
+                side: THREE.DoubleSide
+            });
+            
+            const mesh = new THREE.Mesh(geometry, material);
+            mesh.rotation.x = -Math.PI / 2;
+            mesh.position.set(chunkX * CHUNK_SIZE, 0, chunkZ * CHUNK_SIZE);
+            
+            // Add to scene and cache
+            scene.add(mesh);
+            chunks.set(key, { mesh, x: chunkX, z: chunkZ, resolution });
+            activeChunks.add(key);
+            
+            updateLoadingProgress();
+        }
+
+        // Determine appropriate LOD level based on distance
+        function getLODLevel(distance) {
+            for (let level of LOD_LEVELS) {
+                if (distance <= level.distance) {
+                    return level.resolution;
+                }
+            }
+            return CHUNK_SIZE;
+        }
+
+        // Load/unload chunks based on camera position
+        function updateChunks() {
+            const cameraPos = controls.target;
+            const camChunkX = Math.floor(cameraPos.x / CHUNK_SIZE);
+            const camChunkZ = Math.floor(cameraPos.z / CHUNK_SIZE);
+            
+            const chunksToKeep = new Set();
+            
+            // Determine which chunks should be loaded
+            for (let z = camChunkZ - VIEW_DISTANCE; z <= camChunkZ + VIEW_DISTANCE; z++) {
+                for (let x = camChunkX - VIEW_DISTANCE; x <= camChunkX + VIEW_DISTANCE; x++) {
+                    const key = chunkKey(x, z);
+                    chunksToKeep.add(key);
+                    
+                    if (!activeChunks.has(key) && !loadingQueue.some(c => c.key === key)) {
+                        const distance = Math.sqrt(
+                            Math.pow(x - camChunkX, 2) + 
+                            Math.pow(z - camChunkZ, 2)
+                        ) * CHUNK_SIZE;
+                        
+                        const resolution = getLODLevel(distance);
+                        
+                        loadingQueue.push({
+                            key, x, z, resolution,
+                            priority: distance // Closer chunks have higher priority
+                        });
+                    }
+                }
+            }
+            
+            // Sort queue by priority (closest first)
+            loadingQueue.sort((a, b) => a.priority - b.priority);
+            
+            // Process queue
+            while (workersBusy < MAX_WORKERS && loadingQueue.length > 0) {
+                const { x, z, resolution } = loadingQueue.shift();
+                workersBusy++;
+                
+                worker.postMessage({
+                    chunkX: x,
+                    chunkZ: z,
+                    resolution,
+                    GENERATION_SCALE,
+                    CHUNK_SIZE,
+                    HEIGHT_SCALE
+                });
+            }
+            
+            // Remove chunks that are too far away
+            activeChunks.forEach(key => {
+                if (!chunksToKeep.has(key)) {
+                    const chunk = chunks.get(key);
+                    scene.remove(chunk.mesh);
+                    chunk.mesh.geometry.dispose();
+                    chunks.delete(key);
+                    activeChunks.delete(key);
+                }
+            });
+        }
+
+        // Worker message handler
+        worker.onmessage = function(e) {
+            workersBusy--;
+            createChunkFromData(e.data);
+            updateChunks(); // Process next in queue
+        };
+
+        // Loading progress
+        function updateLoadingProgress() {
+            const totalChunks = Math.pow(VIEW_DISTANCE * 2 + 1, 2);
+            const loaded = activeChunks.size;
+            const progress = Math.min(100, Math.round((loaded / totalChunks) * 100));
+            
+            document.getElementById('progress').style.width = `${progress}%`;
+            document.getElementById('status').textContent = `Loaded ${loaded} of ${totalChunks} chunks`;
+            
+            if (progress >= 100) {
+                setTimeout(() => {
+                    document.getElementById('loading').style.display = 'none';
+                }, 500);
+            }
+        }
+
+        // Movement controls
+        const keys = {};
+        window.addEventListener('keydown', (e) => {
+            keys[e.key.toLowerCase()] = true;
+        });
+        window.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        // Handle camera movement with WASD
+        function updateCamera(deltaTime) {
+            const moveSpeed = CHUNK_SIZE * deltaTime * (controls.getDistance() / CHUNK_SIZE);
+            const pan = new THREE.Vector3();
+            
+            if (keys['w'] || keys['arrowup']) {
+                pan.z -= moveSpeed;
+            }
+            if (keys['s'] || keys['arrowdown']) {
+                pan.z += moveSpeed;
+            }
+            if (keys['a'] || keys['arrowleft']) {
+                pan.x -= moveSpeed;
+            }
+            if (keys['d'] || keys['arrowright']) {
+                pan.x += moveSpeed;
+            }
+            
+            if (pan.length() > 0) {
+                pan.applyQuaternion(camera.quaternion);
+                pan.y = 0; // Keep movement horizontal
+                controls.target.add(pan);
+                camera.position.add(pan);
+            }
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initial chunks
+        updateChunks();
+        updateLoadingProgress();
+
+        // Animation loop
+        let lastTime = 0;
+        function animate(time) {
+            const deltaTime = Math.min(0.1, (time - lastTime) / 1000);
+            lastTime = time;
+            
+            updateCamera(deltaTime);
+            updateChunks();
+            controls.update();
+            renderer.render(scene, camera);
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
 </html>
