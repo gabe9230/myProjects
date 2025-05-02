@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Optimized Infinite 3D Heightmap</title>
+    <title>Optimized 3D Heightmap with Proper Sea Level</title>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
@@ -53,17 +53,20 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
     <script>
         // Configuration
-        const GRID_SIZE = 1;
-        const CHUNK_SIZE = 32;
+        const GRID_SIZE = 2;
+        const CHUNK_SIZE = 16;
         const GENERATION_SCALE = 0.005;
         const HEIGHT_SCALE = CHUNK_SIZE/2;
         const INITIAL_ZOOM = CHUNK_SIZE*2;
-        const VIEW_DISTANCE = 3; // Chunks in each direction
+        const VIEW_DISTANCE = 5; // Reduced view distance for performance
         const LOD_LEVELS = [
-            { distance: CHUNK_SIZE*1.5, resolution: 8 },
-            { distance: CHUNK_SIZE*3, resolution: 16 },
+            { distance: CHUNK_SIZE*3, resolution: 128 },
+            { distance: CHUNK_SIZE*6, resolution: 64 },
             { distance: Infinity, resolution: 32 }
         ];
+        // Adjusted sea level accounting for Three.js coordinate system
+        const SEA_LEVEL_NORMALIZED = 0.25;
+        const SEA_LEVEL = SEA_LEVEL_NORMALIZED * HEIGHT_SCALE - (HEIGHT_SCALE/2);
 
         // Three.js setup
         const scene = new THREE.Scene();
@@ -72,7 +75,7 @@
         
         const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth / window.innerHeight);
+        renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
         // Lighting
@@ -98,8 +101,8 @@
         controls.target.set(0, 0, 0);
         controls.update();
 
-        // Create Web Worker for chunk generation
-        const worker = new Worker(URL.createObjectURL(new Blob([`
+        // Web Worker code as a string
+        const workerCode = `
             // Perlin Noise implementation
             class FastPerlin {
                 constructor() {
@@ -176,7 +179,9 @@
                         h += 0.5 * perlin.noise(wx * GENERATION_SCALE * 2, wz * GENERATION_SCALE * 2);
                         h = applyScale(h);
                         
-                        positions.push(x, z, h * HEIGHT_SCALE);
+                        // Height adjusted for Three.js coordinate system
+                        const height = (h * HEIGHT_SCALE) - (HEIGHT_SCALE/2);
+                        positions.push(x, z, height);
                         
                         // Terrain color
                         const normalizedHeight = (h + 1) / 2;
@@ -207,10 +212,17 @@
                 
                 self.postMessage({
                     chunkX, chunkZ, resolution,
-                    positions, colors, indices
-                }, [positions.buffer, colors.buffer, indices.buffer]);
+                    positions: new Float32Array(positions),
+                    colors: new Float32Array(colors),
+                    indices: new Uint32Array(indices)
+                });
             };
-        `], { type: 'text/javascript' })));
+        `;
+
+        // Create Web Worker
+        const workerBlob = new Blob([workerCode], { type: 'application/javascript' });
+        const workerUrl = URL.createObjectURL(workerBlob);
+        const worker = new Worker(workerUrl);
 
         // Chunk management
         const chunks = new Map();
@@ -229,9 +241,9 @@
             const key = chunkKey(chunkX, chunkZ);
             
             const geometry = new THREE.BufferGeometry();
-            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
-            geometry.setIndex(indices);
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geometry.setIndex(new THREE.BufferAttribute(indices, 1));
             geometry.computeVertexNormals();
             
             const material = new THREE.MeshStandardMaterial({
@@ -242,7 +254,7 @@
             
             const mesh = new THREE.Mesh(geometry, material);
             mesh.rotation.x = -Math.PI / 2;
-            mesh.position.set(chunkX * CHUNK_SIZE, 0, chunkZ * CHUNK_SIZE);
+            mesh.position.set(chunkX * CHUNK_SIZE, 0, -chunkZ * CHUNK_SIZE);
             
             // Add to scene and cache
             scene.add(mesh);
@@ -250,6 +262,36 @@
             activeChunks.add(key);
             
             updateLoadingProgress();
+        }
+
+        // Create sea plane for visible area
+        function updateSeaPlane() {
+            // Remove existing sea plane if it exists
+            if (scene.getObjectByName('seaPlane')) {
+                scene.remove(scene.getObjectByName('seaPlane'));
+            }
+            
+            const cameraPos = controls.target;
+            const camChunkX = Math.floor(cameraPos.x / CHUNK_SIZE);
+            const camChunkZ = Math.floor(-cameraPos.z / CHUNK_SIZE);
+            
+            // Create a new sea plane covering the visible area
+            const seaPlaneSize = CHUNK_SIZE * (VIEW_DISTANCE * 2 + 1);
+            const seaPlane = new THREE.Mesh(
+                new THREE.PlaneGeometry(seaPlaneSize, seaPlaneSize),
+                new THREE.MeshStandardMaterial({
+                    color: 0x0066ff,
+                    side: THREE.DoubleSide
+                })
+            );
+            seaPlane.name = 'seaPlane';
+            seaPlane.rotation.x = -Math.PI / 2;
+            seaPlane.position.set(
+                camChunkX * CHUNK_SIZE + CHUNK_SIZE/2,
+                SEA_LEVEL-6,
+                -camChunkZ * CHUNK_SIZE - CHUNK_SIZE/2
+            );
+            scene.add(seaPlane);
         }
 
         // Determine appropriate LOD level based on distance
@@ -266,7 +308,7 @@
         function updateChunks() {
             const cameraPos = controls.target;
             const camChunkX = Math.floor(cameraPos.x / CHUNK_SIZE);
-            const camChunkZ = Math.floor(cameraPos.z / CHUNK_SIZE);
+            const camChunkZ = Math.floor(-cameraPos.z / CHUNK_SIZE);
             
             const chunksToKeep = new Set();
             
@@ -320,6 +362,9 @@
                     activeChunks.delete(key);
                 }
             });
+            
+            // Update sea plane position
+            updateSeaPlane();
         }
 
         // Worker message handler
@@ -387,7 +432,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Initial chunks
+        // Initial chunks and sea plane
         updateChunks();
         updateLoadingProgress();
 
@@ -398,7 +443,6 @@
             lastTime = time;
             
             updateCamera(deltaTime);
-            updateChunks();
             controls.update();
             renderer.render(scene, camera);
             requestAnimationFrame(animate);

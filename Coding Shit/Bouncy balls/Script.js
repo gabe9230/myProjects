@@ -1,4 +1,4 @@
-const NBALLS = 20000;
+const NBALLS = 5000;
 const CENTER_COLOR = [0.5, 0.0, 0.0];
 const FAR_COLOR = [1.0, 0.5, 0.5];
 const MAX_SPEED = 5.0;
