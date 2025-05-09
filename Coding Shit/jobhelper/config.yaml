@@ -1,0 +1,36 @@
+resume_path: "./resume.pdf"
+cover_letter_template: "./cover_letter.txt"
+
+priority_keywords:
+  cnc: 3
+  machinist: 3
+  g-code: 2
+  cad: 2
+  cam: 2
+  mastercam: 2
+  solidworks: 2
+  python: 1
+  javascript: 1
+  arduino: 1
+  prototyping: 1
+  robotics: 2
+  entry-level: 2
+  junior: 2
+  operator: 1
+  engineering: 2
+  fabrication: 2
+  milling: 2
+  vericut: 1
+  camotics: 1
+
+exclude_keywords:
+  - senior
+  - manager
+  - director
+  - recruiting agency
+  - commission only
+  - temporary
+
+manual_verification_steps:
+  before_submit: true
+  before_login: false
