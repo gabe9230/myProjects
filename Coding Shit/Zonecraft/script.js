@@ -180,7 +180,6 @@ setInterval(() => {
     state.cursor = !state.cursor
     drawPrompt()
 }, 500)
-// Command Functions
 
 // Policy review
 function showMetaData(request) {
@@ -200,46 +199,43 @@ function showMetaData(request) {
 function showHandbook() {
     panels.infoPanel.innerHTML = `
     <div class="handbook">
-    <h2>DNS Operations Handbook &amp; Key Commands</h2>
-
-    <h3>Core Rules</h3>
-    <ul>
-    <li><strong>Glue Change</strong>: Only use IPv4 from <code>192.0.2.0</code> to <code>192.0.2.255</code> or IPv6 from <code>2001:db8:0000</code> to <code>2001:db8:ffff</code>.</li>
-    <li><strong>NS Addition</strong>: You may only add NS entries in ns1 to ns4, never delete existing NS entries.</li>
-    <li><strong>DNSKEY Update</strong>: Use algorithm 8 or 13 only; do not alter key tags or flags.</li>
-    <li><strong>DS Addition/Update</strong>: Use alg 8 or 13; you may add or update but <em>never remove</em> DS records in daily updates.</li>
-    <li><strong>DS Removal</strong>: Disallowed—DS records must remain.</li>
-    <li><strong>TTL Adjustment</strong>: New TTLs must follow these ranges:<br>
-        • NS: 43200-172800 s<br>
-        • DS: 3600-14400 s<br>
-        • Glue: 300-7200 s<br>
-        • Other records (A/MX/CNAME/TXT): 300-86400 s
-    </li>
-    <li><strong>SOA Update</strong>: Disallowed in daily pushes—do not change the SOA serial or any SOA fields.</li>
-    <li><strong>RRSIG Rotation</strong>: Disallowed in daily pushes—do not modify RRSIG records.</li>
-    <li><strong>MX Update</strong>: New MX must point to a valid host in the zone, use priority 0-65535, and follow TTL guidelines.</li>
-    <li><strong>A Record Addition</strong>: Added A records must have matching AAAA if needed, use valid public IPs, and follow TTL guidelines.</li>
-    <li><strong>CNAME Addition</strong>: No CNAME at zone apex; target must be a valid name and not create loops; TTL per guidelines.</li>
-    <li><strong>TXT Record Update</strong>: Text strings must be ≤255 chars; follow TTL guidelines.</li>
-    <li>Reject any request that would leave unpaired A/AAAA entries or empty glue records.</li>
-    <li>If in doubt <strong>escalate</strong> by pressing <code>x</code>.</li>
-  </ul>
-
-
-    <h3>Key Commands</h3>
-    <ul>
-    <li><code>y</code> — Approve current request</li>
-    <li><code>n</code> — Reject current request</li>
-    <li><code>x</code> — Escalate for manual review</li>
-    <li><code>next</code> — Load next pending request</li>
-    <li><code>metadata</code> — Display full metaData for the active request</li>
-    <li><code>grep ___ ;</code> — Search zone records for ____</li>
-    <li><code>audit</code> — View recent audit log entries</li>
-    <li><code>metrics</code> — View performance &amp; error metrics</li>
-    <li><code>clear</code> — Clear the terminal window</li>
-    <li><code>logout</code> — End your shift (after processing all requests)</li>
-    <li><code>help</code> — Show this commands list</li>
-    </ul>
+        <h2>DNS Operations Handbook &amp; Key Commands</h2>
+        <h3>Core Rules</h3>
+        <ul>
+            <li><strong>Glue Change</strong>: Only use IPv4 from <code>192.0.2.0</code> to <code>192.0.2.255</code> or IPv6 from <code>2001:db8:0000</code> to <code>2001:db8:ffff</code>.</li>
+            <li><strong>NS Addition</strong>: You may only add NS entries in ns1 to ns4, never delete existing NS entries.</li>
+            <li><strong>DNSKEY Update</strong>: Use algorithm 8 or 13 only; do not alter key tags or flags.</li>
+            <li><strong>DS Addition/Update</strong>: Use alg 8 or 13; you may add or update but <em>never remove</em> DS records in daily updates.</li>
+            <li><strong>DS Removal</strong>: Disallowed—DS records must remain.</li>
+            <li><strong>TTL Adjustment</strong>: New TTLs must follow these ranges:<br>
+                • NS: 43200-172800 s<br>
+                • DS: 3600-14400 s<br>
+                • Glue: 300-7200 s<br>
+                • Other records (A/MX/CNAME/TXT): 300-86400 s
+            </li>
+            <li><strong>SOA Update</strong>: Disallowed in daily pushes—do not change the SOA serial or any SOA fields.</li>
+            <li><strong>RRSIG Rotation</strong>: Disallowed in daily pushes—do not modify RRSIG records.</li>
+            <li><strong>MX Update</strong>: New MX must point to a valid host in the zone, use priority 0-65535, and follow TTL guidelines.</li>
+            <li><strong>A Record Addition</strong>: Added A records must have matching AAAA if needed, use valid public IPs, and follow TTL guidelines.</li>
+            <li><strong>CNAME Addition</strong>: No CNAME at zone apex; target must be a valid name and not create loops; TTL per guidelines.</li>
+            <li><strong>TXT Record Update</strong>: Text strings must be ≤255 chars; follow TTL guidelines.</li>
+            <li>Reject any request that would leave unpaired A/AAAA entries or empty glue records.</li>
+            <li>If in doubt <strong>escalate</strong> by pressing <code>x</code>.</li>
+        </ul>
+        <h3>Key Commands</h3>
+        <ul>
+            <li><code>y</code> — Approve current request</li>
+            <li><code>n</code> — Reject current request</li>
+            <li><code>x</code> — Escalate for manual review</li>
+            <li><code>next</code> — Load next pending request</li>
+            <li><code>metadata</code> — Display full metaData for the active request</li>
+            <li><code>grep ___</code> — Search zone records for ____</li>
+            <li><code>audit</code> — View recent audit log entries</li>
+            <li><code>metrics</code> — View performance &amp; error metrics</li>
+            <li><code>clear</code> — Clear the terminal window</li>
+            <li><code>logout</code> — End your shift (after processing all requests)</li>
+            <li><code>help</code> — Show this commands list</li>
+        </ul>
     </div>
     `
 }
@@ -399,6 +395,7 @@ function generateRequests() {
               req.diff = [
                 `- ${tld} DS ${tag} 8 2 ...`
               ];
+              req.status = 'bad'
               break;
             }
           
@@ -439,6 +436,7 @@ function generateRequests() {
                 `- ${tld} RRSIG ${rrtype} oldsig...`,
                 `+ ${tld} RRSIG ${rrtype} newsig...`
               ];
+              req.status = 'bad'
               break;
             }
           
