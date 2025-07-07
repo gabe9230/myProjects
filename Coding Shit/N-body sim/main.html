@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>N‑Body Orbital Mechanics Simulator</title>
+        <style>
+            html,
+            body {
+                margin: 0;
+                height: 100%;
+                overflow: hidden;
+                background: #000;
+            }
+            #c {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+            #hud,
+            #speedCtl {
+                position: absolute;
+                left: 10px;
+                color: #0f0;
+                font-family: monospace;
+                font-size: 14px;
+                user-select: none;
+            }
+            #hud {
+                top: 10px;
+            }
+            #speedCtl {
+                top: 34px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+            #speedCtl input {
+                accent-color: #0f0;
+            }
+            #cfg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: #111;
+                padding: 16px 20px;
+                border: 1px solid #0f0;
+                border-radius: 6px;
+                color: #0f0;
+                font-family: monospace;
+                font-size: 14px;
+                display: none;
+                min-width: 260px;
+            }
+            #cfg label {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin: 4px 0;
+            }
+            #cfg input[type='number'],
+            #cfg input[type='color'] {
+                background: #222;
+                color: #0f0;
+                border: 1px solid #0f0;
+                padding: 2px 4px;
+            }
+            #cfg input[type='number'] {
+                width: 90px;
+            }
+            #cfg input[type='color'] {
+                border: none;
+                width: 36px;
+                height: 24px;
+                padding: 0;
+            }
+            #cfg button {
+                margin-top: 8px;
+                width: 48%;
+                padding: 4px;
+                border: none;
+                border-radius: 4px;
+                font-weight: bold;
+                cursor: pointer;
+            }
+            #addBtn {
+                background: #063;
+            }
+            #cancelBtn {
+                background: #600;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id="c"></canvas>
+        <div id="hud">
+            Space: pause/run | Drag+release: place body | R: reset
+        </div>
+        <div id="speedCtl">
+            Speed&nbsp;<input
+                type="range"
+                id="speed"
+                min="0.01"
+                max="0.30"
+                step="0.01"
+                value="0.01"
+            /><span id="sv">0.01</span>x
+        </div>
+
+        <!-- Configuration overlay -->
+        <div id="cfg">
+            <label
+                >Mass <input id="mass" type="number" value="1000" step="100"
+            /></label>
+            <label
+                >Radius
+                <input
+                    id="radius"
+                    type="number"
+                    value="0"
+                    step="1"
+                    title="0 = auto"
+            /></label>
+            <label
+                >Color <input id="color" type="color" value="#ffcc00"
+            /></label>
+            <label><input id="orbitChk" type="checkbox" /> Put in orbit</label>
+            <label
+                >Eccentricity
+                <input
+                    id="ecc"
+                    type="number"
+                    value="0"
+                    min="0"
+                    max="0.9"
+                    step="0.05"
+            /></label>
+            <label
+                >Period (s)
+                <input id="period" type="number" value="60" step="10"
+            /></label>
+            <div style="display: flex; justify-content: space-between">
+                <button id="addBtn">ADD</button>
+                <button id="cancelBtn">CANCEL</button>
+            </div>
+        </div>
+
+        <script>
+            /**************** Canvas setup ****************/
+            const canvas = document.getElementById('c'),
+                ctx = canvas.getContext('2d')
+            function resize() {
+                canvas.width = window.innerWidth
+                canvas.height = window.innerHeight
+            }
+            window.addEventListener('resize', resize)
+            resize()
+
+            /**************** Physics & Body ****************/
+            const G = 1 // Arbitrary‑unit gravitational constant
+            let dt = 0.01 // Will be bound to speed slider
+            let paused = false
+            class Body {
+                constructor(
+                    x,
+                    y,
+                    vx,
+                    vy,
+                    mass,
+                    radius = 0,
+                    color = `hsl(${Math.random() * 360} 80% 60%)`
+                ) {
+                    this.x = x
+                    this.y = y
+                    this.vx = vx
+                    this.vy = vy
+                    this.m = mass
+                    this.r = radius || Math.cbrt(mass) * 0.5
+                    this.col = color
+                }
+            }
+            const bodies = []
+
+            /**************** Speed control ****************/
+            const speedSlider = document.getElementById('speed'),
+                speedVal = document.getElementById('sv')
+            function setSpeed(v) {
+                dt = v
+                speedVal.textContent = v.toFixed(2)
+            }
+            speedSlider.addEventListener('input', (e) =>
+                setSpeed(+e.target.value)
+            )
+            setSpeed(+speedSlider.value)
+
+            /**************** Helpers ****************/
+            function accelAt(px, py) {
+                let ax = 0,
+                    ay = 0
+                for (const b of bodies) {
+                    const dx = b.x - px,
+                        dy = b.y - py,
+                        d2 = dx * dx + dy * dy + 1e-6,
+                        d = Math.sqrt(d2),
+                        f = (G * b.m) / d2
+                    ax += (f * dx) / d
+                    ay += (f * dy) / d
+                }
+                return [ax, ay]
+            }
+            function circularVelocity(px, py, central) {
+                const [ax, ay] = accelAt(px, py)
+                const dx = px - central.x,
+                    dy = py - central.y,
+                    r = Math.hypot(dx, dy)
+                const ar = -(ax * dx + ay * dy) / r // inward accel
+                return ar > 0 ? Math.sqrt(ar * r) : 0
+            }
+
+            /**************** Stable Sun‑Earth‑Moon system ****************/
+            function initSystem() {
+                bodies.length = 0
+                const cx = canvas.width / 2,
+                    cy = canvas.height / 2
+                const sunMass = 1e5,
+                    sun = new Body(cx, cy, 0, 0, sunMass, 20, '#ffaa00')
+                bodies.push(sun)
+                const earthDist = 250,
+                    earthMass = 100
+                const earthV = Math.sqrt((G * sunMass) / earthDist)
+                const earth = new Body(
+                    cx + earthDist,
+                    cy,
+                    0,
+                    -earthV,
+                    earthMass,
+                    8,
+                    '#33aaff'
+                )
+                bodies.push(earth)
+                const moonDist = 10,
+                    moonMass = 1
+                const moonX = earth.x,
+                    moonY = earth.y + moonDist
+                const vCirc = circularVelocity(moonX, moonY, earth)
+                const moon = new Body(
+                    moonX,
+                    moonY,
+                    earth.vx + vCirc,
+                    earth.vy,
+                    moonMass,
+                    3,
+                    '#cccccc'
+                )
+                bodies.push(moon)
+            }
+            initSystem()
+
+            /**************** Input & placement ****************/
+            let placing = false,
+                startX = 0,
+                startY = 0,
+                mouseX = 0,
+                mouseY = 0,
+                pending = null
+            canvas.addEventListener('mousedown', (e) => {
+                if (paused) return
+                placing = true
+                startX = e.clientX
+                startY = e.clientY
+            })
+            canvas.addEventListener('mouseup', (e) => {
+                if (!placing) return
+                placing = false
+                pending = {
+                    x: startX,
+                    y: startY,
+                    vx: (e.clientX - startX) * 0.05,
+                    vy: (e.clientY - startY) * 0.05,
+                }
+                showCfg()
+            })
+            canvas.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX
+                mouseY = e.clientY
+            })
+            window.addEventListener('keydown', (e) => {
+                if (e.code === 'Space') paused = !paused
+                if (e.key === 'r') initSystem()
+            })
+
+            /**************** Config overlay ****************/
+            const cfg = document.getElementById('cfg'),
+                massI = cfg.querySelector('#mass'),
+                radI = cfg.querySelector('#radius'),
+                colorI = cfg.querySelector('#color'),
+                orbChk = cfg.querySelector('#orbitChk'),
+                eccI = cfg.querySelector('#ecc'),
+                perI = cfg.querySelector('#period'),
+                addBtn = cfg.querySelector('#addBtn'),
+                cancelBtn = cfg.querySelector('#cancelBtn')
+            function showCfg() {
+                cfg.style.display = 'block'
+            }
+            function hideCfg() {
+                cfg.style.display = 'none'
+                pending = null
+            }
+            addBtn.onclick = () => {
+                const m = +massI.value
+                if (!isFinite(m) || m <= 0) return
+                let r = +radI.value
+                if (!isFinite(r) || r <= 0) r = Math.cbrt(m) * 0.5
+                const col = colorI.value
+                let vx = pending.vx,
+                    vy = pending.vy
+
+                if (orbChk.checked && bodies.length) {
+                    let central = null,
+                        minD2 = Infinity
+                    for (const b of bodies) {
+                        const dx = pending.x - b.x,
+                            dy = pending.y - b.y,
+                            d2 = dx * dx + dy * dy
+                        if (d2 < minD2) {
+                            minD2 = d2
+                            central = b
+                        }
+                    }
+                    if (central) {
+                        const dx = pending.x - central.x,
+                            dy = pending.y - central.y,
+                            rmag = Math.hypot(dx, dy)
+                        let vmag = circularVelocity(
+                            pending.x,
+                            pending.y,
+                            central
+                        )
+                        const ecc = +eccI.value || 0
+                        if (ecc !== 0) {
+                            const mu = G * (central.m + m)
+                            const a = rmag / (1 - ecc)
+                            vmag = Math.sqrt(mu * (2 / rmag - 1 / a))
+                        }
+                        const tx = -dy / rmag,
+                            ty = dx / rmag
+                        vx = central.vx + tx * vmag
+                        vy = central.vy + ty * vmag
+                    }
+                }
+                bodies.push(new Body(pending.x, pending.y, vx, vy, m, r, col))
+                hideCfg()
+            }
+            cancelBtn.onclick = hideCfg
+
+            /**************** Simulation ****************/
+            function update() {
+                for (const bi of bodies) {
+                    let ax = 0,
+                        ay = 0
+                    for (const bj of bodies) {
+                        if (bi === bj) continue
+                        const dx = bj.x - bi.x,
+                            dy = bj.y - bi.y,
+                            d2 = dx * dx + dy * dy + 1e-6,
+                            d = Math.sqrt(d2),
+                            f = (G * bj.m) / d2
+                        ax += (f * dx) / d
+                        ay += (f * dy) / d
+                    }
+                    bi.vx += ax * dt
+                    bi.vy += ay * dt
+                }
+                for (const b of bodies) {
+                    b.x += b.vx * dt
+                    b.y += b.vy * dt
+                }
+            }
+
+            /**************** Rendering ****************/
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height)
+                for (const b of bodies) {
+                    ctx.fillStyle = b.col
+                    ctx.beginPath()
+                    ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2)
+                    ctx.fill()
+                }
+                if (placing) {
+                    ctx.strokeStyle = '#fff'
+                    ctx.beginPath()
+                    ctx.moveTo(startX, startY)
+                    ctx.lineTo(mouseX, mouseY)
+                    ctx.stroke()
+                }
+            }
+
+            /**************** Main loop ****************/
+            ;(function loop() {
+                if (!paused) update()
+                draw()
+                requestAnimationFrame(loop)
+            })()
+        </script>
+    </body>
+</html>

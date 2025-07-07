@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Transcendental Hypnotherapy</title>
+    <style>
+      :root {
+        --blue: #a2dde6;
+        --thistle: #e9d2f4;
+        --darkblue: #416788;
+        --gold: #f5b700; /* soft gold for glow */
+        --text-dark: #2b2b2b;
+        --max-width: 1200px;
+      }
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family: "the-seasons", "sans-serif";
+        font-style: normal;
+        color: var(--text-dark);
+        line-height: 1.6;
+        background: var(--thistle);
+        overflow-x: hidden;
+      }
+      /* fixed hypnotic canvas backdrop */
+      #bgCanvas {
+        position: fixed;
+        inset: 0;
+        z-index: -2;
+      }
+      /* glow overlay */
+      #borderGlow {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -1;
+        box-shadow: 0 0 0 0 rgba(245, 183, 0, 0) inset;
+        transition: box-shadow 0.15s linear;
+      }
+      main {
+        max-width: var(--max-width);
+        margin-inline: auto;
+        padding: 0 1.25rem;
+      }
+      section {
+        padding-block: 6rem 5rem;
+        margin-bottom: 4rem;
+        scroll-margin-top: 6rem;
+      }
+      h1,
+      h2,
+      h3 {
+        font-weight: 700;
+      }
+      h2 {
+        font-size: 2.25rem;
+        margin-bottom: 1.5rem;
+        color: var(--darkblue);
+      }
+      p {
+        margin-bottom: 1rem;
+      }
+      /* header */
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        background: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(4px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        max-width: var(--max-width);
+        margin-inline: auto;
+        padding: 1rem 1.25rem;
+      }
+      .logo {
+        font-size: 1.5rem;
+        text-decoration: none;
+        color: var(--darkblue);
+        font-weight: 700;
+      }
+      .nav-links {
+        display: flex;
+        gap: 2rem;
+        list-style: none;
+      }
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-dark);
+        font-weight: 500;
+        position: relative;
+      }
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: -4px;
+        width: 100%;
+        height: 2px;
+        background: var(--darkblue);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.25s ease;
+      }
+      .nav-links a:hover::after {
+        transform: scaleX(1);
+      }
+      .btn {
+        display: inline-block;
+        padding: 0.75rem 1.75rem;
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 600;
+        background: var(--darkblue);
+        color: thistle;
+        transition: filter 0.25s ease, transform 0.25s ease;
+      }
+      .btn:hover {
+        filter: brightness(1.1);
+        transform: translateY(-2px);
+      }
+      /* hero */
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        background: url("https://images.unsplash.com/photo-1504439904031-93ded7c2186d?auto=format&fit=crop&w=1350&q=80")
+          center/cover fixed;
+      }
+      .hero-overlay {
+        background: thistle;
+        padding: 3rem;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      }
+      /* sections */
+      .alt-bg {
+        background: var(--blue);
+      }
+      .alt-bg h2 {
+        color: #00414b;
+      }
+      .alt-bg p {
+        color: #00323e;
+      }
+      .contact-block {
+        text-align: center;
+      }
+      .mainbody {
+        background: thistle;
+        padding: 2rem;
+        border-radius: 1rem;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+      }
+      /* footer */
+      footer {
+        background: var(--darkblue);
+        opacity: 80%;
+        color: thistle;
+        text-align: center;
+        padding: 2rem 0;
+        margin-top: 4rem;
+      }
+      /* responsive */
+      @media (max-width: 700px) {
+        nav {
+          flex-direction: column;
+          gap: 0.75rem;
+        }
+        .nav-links {
+          gap: 1rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+        section {
+          padding-block: 4rem;
+        }
+        h2 {
+          font-size: 1.75rem;
+        }
+      }
+      #borderGlow {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: -1;
+
+        /* gradients on the left & right, transparent middle */
+        background: linear-gradient(
+              to right,
+              rgba(245, 183, 0, var(--glow-alpha)) 0,
+              /* full gold at edge */ rgba(245, 183, 0, 0) 60%
+                /* fade to nothing */
+            )
+            0 0/8vw 100% no-repeat,
+          /* left strip */
+            linear-gradient(
+              to left,
+              rgba(245, 183, 0, var(--glow-alpha)) 0,
+              rgba(245, 183, 0, 0) 60%
+            )
+            100% 0/8vw 100% no-repeat; /* right strip */
+        transition: --glow-alpha 0.15s linear;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="bgCanvas"></canvas>
+    <div id="borderGlow"></div>
+    <header>
+      <nav>
+        <a href="#home" class="logo">TRANSCENDENTAL HYPNOTHERAPY</a>
+        <ul class="nav-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#hypnotherapy">What is Hypnotherapy?</a></li>
+          <li><a href="#how">How it Works</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="/shop.html">Shop</a></li>
+        </ul>
+        <a href="https://calendly.com/your-calendly" class="btn"
+          >Contact&nbsp;Me</a
+        >
+      </nav>
+    </header>
+
+    <main>
+      <!-- hero -->
+      <section class="hero" id="home">
+        <div class="hero-overlay">
+          <h1
+            style="
+              font-size: 2.75rem;
+              color: var(--darkblue);
+              margin-bottom: 1rem;
+            "
+          >
+            TRANSCENDENTAL HYPNOTHERAPY
+          </h1>
+          <p style="max-width: 40ch; margin-inline: auto; font-size: 1.125rem">
+            Specialising in transformational therapy for depression, anxiety
+            &amp; addiction.
+          </p>
+          <a href="#contact" class="btn">Book a Session</a>
+        </div>
+      </section>
+
+      <!-- services -->
+      <section id="services" class="mainbody">
+        <h2>Areas of Focus</h2>
+        <p>
+          <strong>Depression&nbsp;-</strong> Change the inner narrative that
+          fuels sadness and learned hopelessness. Reconnect with meaning,
+          purpose, and emotional resilience.
+        </p>
+        <p>
+          <strong>Anxiety&nbsp;-</strong> Address the root causes of fear,
+          chronic worry, panic, and overthinking.
+        </p>
+        <p>
+          <strong>Addiction&nbsp;-</strong> Whether rooted in habit, trauma, or
+          genetics, addiction is a subconscious loop of temporary relief. Break
+          that loop and create a healthier internal narrative grounded in
+          control and lasting inner peace.
+        </p>
+      </section>
+
+      <!-- what is hypnotherapy -->
+      <section class="mainbody" id="hypnotherapy">
+        <h2>What is Hypnotherapy?</h2>
+        <p>
+          Hypnotherapy is a gentle, collaborative practice that taps directly
+          into the subconscious mind &mdash; where habits, beliefs, and emotions
+          are stored. In a relaxed yet focused state, we rewrite limiting
+          narratives and embed healthier patterns that serve your wellbeing.
+        </p>
+      </section>
+
+      <!-- how it works -->
+      <section id="how" class="mainbody">
+        <h2>How &amp; Why It Works</h2>
+        <p>
+          Under guided relaxation, brain‑wave activity shifts toward theta
+          frequencies, opening a window for rapid learning and imprinting. By
+          pairing customised visualisations with evidence‑based suggestion
+          therapy, we bypass critical resistance and accelerate positive change.
+        </p>
+      </section>
+
+      <!-- contact -->
+      <section id="contact" class="mainbody contact-block">
+        <h2>Ready to Begin?</h2>
+        <p>Schedule a consultation or book a full session.</p>
+        <a
+          href="https://calendly.com/your-calendly"
+          class="btn"
+          style="margin-top: 1rem"
+          >Contact Me</a
+        >
+        <p style="margin-top: 2rem; font-size: 0.9rem">
+          Email:
+          <a href="mailto:r3b3k4sw0r1d@gmail.com">r3b3k4sw0r1d@gmail.com</a>
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Rebeka Fodor. All rights reserved.</p>
+    </footer>
+    <script>
+      /* ========== Canvas & resize ========== */
+      const canvas = document.getElementById("bgCanvas");
+      const ctx = canvas.getContext("2d");
+      let W, H;
+      function resize() {
+        W = canvas.width = innerWidth;
+        H = canvas.height = innerHeight;
+      }
+      addEventListener("resize", resize);
+      resize();
+      let t = 0;
+      /* ========== 2-D Simplex noise ========== */
+      class Simplex {
+        constructor() {
+          this.p = new Uint8Array(512);
+          for (let i = 0; i < 256; i++) this.p[i] = i;
+          for (let i = 255; i > 0; i--) {
+            const r = (Math.random() * (i + 1)) | 0;
+            t = this.p[i];
+            this.p[i] = this.p[r];
+            this.p[r] = t;
+          }
+          for (let i = 0; i < 256; i++) this.p[i + 256] = this.p[i];
+        }
+        dot(g, x, y) {
+          return g[0] * x + g[1] * y;
+        }
+        noise(x, y) {
+          const grad = [
+            [1, 1],
+            [-1, 1],
+            [1, -1],
+            [-1, -1],
+            [1, 0],
+            [-1, 0],
+            [0, 1],
+            [0, -1],
+          ];
+          const F = 0.5 * (Math.sqrt(3) - 1),
+            G = (3 - Math.sqrt(3)) / 6;
+          let n0 = 0,
+            n1 = 0,
+            n2 = 0;
+          const s = (x + y) * F,
+            i = Math.floor(x + s),
+            j = Math.floor(y + s);
+          const t = (i + j) * G,
+            X0 = i - t,
+            Y0 = j - t,
+            x0 = x - X0,
+            y0 = y - Y0;
+          let i1, j1;
+          if (x0 > y0) {
+            i1 = 1;
+            j1 = 0;
+          } else {
+            i1 = 0;
+            j1 = 1;
+          }
+          const x1 = x0 - i1 + G,
+            y1 = y0 - j1 + G,
+            x2 = x0 - 1 + 2 * G,
+            y2 = y0 - 1 + 2 * G;
+          const ii = i & 255,
+            jj = j & 255;
+          let t0 = 0.5 - x0 * x0 - y0 * y0;
+          if (t0 > 0) {
+            t0 *= t0;
+            n0 = t0 * t0 * this.dot(grad[this.p[ii + this.p[jj]] % 8], x0, y0);
+          }
+          let t1 = 0.5 - x1 * x1 - y1 * y1;
+          if (t1 > 0) {
+            t1 *= t1;
+            n1 =
+              t1 *
+              t1 *
+              this.dot(grad[this.p[ii + i1 + this.p[jj + j1]] % 8], x1, y1);
+          }
+          let t2 = 0.5 - x2 * x2 - y2 * y2;
+          if (t2 > 0) {
+            t2 *= t2;
+            n2 =
+              t2 *
+              t2 *
+              this.dot(grad[this.p[ii + 1 + this.p[jj + 1]] % 8], x2, y2);
+          }
+          return 70 * (n0 + n1 + n2);
+        }
+      }
+      const simplex = new Simplex();
+
+      /* ========== Voronoi sites ========== */
+      const SITE_COUNT = 24;
+      let sites = [];
+      function regenSites() {
+        sites = [];
+        for (let i = 0; i < SITE_COUNT; i++)
+          sites.push([Math.random(), Math.random()]);
+      }
+      regenSites();
+
+      /* ========== Off-screen texture (low-res) ========== */
+      const TEX = 320;
+      const off = document.createElement("canvas");
+      off.width = off.height = TEX;
+      const ictx = off.getContext("2d");
+      let img = ictx.createImageData(TEX, TEX);
+      const data = img.data;
+
+      /* ========== Colour helpers ========== */
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+      function clamp(x, l, h) {
+        return x < l ? l : x > h ? h : x;
+      }
+      /* palette picks */
+      const DBLUE = [20, 100, 122];
+      const THISTLE = [238, 212, 202];
+      const GOLD = [208, 170, 115];
+
+      /* ========== Main draw ========== */
+      function render(t) {
+        const time = t * 0.00004;
+        let p = 0;
+        for (let y = 0; y < TEX; y++) {
+          for (let x = 0; x < TEX; x++) {
+            const nx = x / TEX,
+              ny = y / TEX;
+            const disp = 0.025;
+            const dx = simplex.noise(nx * 4 + time, ny * 4 + time) * disp;
+            const dy = simplex.noise(nx * 4 - time, ny * 4 - time) * disp;
+            const u = clamp(nx + dx, 0, 1),
+              v = clamp(ny + dy, 0, 1);
+            let d1 = 1e9,
+              d2 = 1e9,
+              idx = -1;
+            for (let i = 0; i < SITE_COUNT; i++) {
+              const sx = sites[i][0],
+                sy = sites[i][1];
+              const d = (sx - u) * (sx - u) + (sy - v) * (sy - v);
+              if (d < d1) {
+                d2 = d1;
+                d1 = d;
+                idx = i;
+              } else if (d < d2) d2 = d;
+            }
+            const edgeDist = Math.sqrt(d2) - Math.sqrt(d1);
+            const edge = clamp(1 - edgeDist * 15, 0, 1);
+
+            const plateCol = DBLUE;
+
+            const r = lerp(plateCol[0], GOLD[0], edge);
+            const g = lerp(plateCol[1], GOLD[1], edge);
+            const b = lerp(plateCol[2], GOLD[2], edge);
+
+            data[p++] = r | 0;
+            data[p++] = g | 0;
+            data[p++] = b | 0;
+            data[p++] = 255;
+          }
+        }
+        ictx.putImageData(img, 0, 0);
+
+        /* upscale & paint on main canvas --------------------------- */
+        ctx.clearRect(0, 0, W, H);
+        ctx.drawImage(off, 0, 0, W, H);
+
+        requestAnimationFrame(render);
+      }
+
+      requestAnimationFrame(render);
+
+      function updateGlow() {
+        const max = document.documentElement.scrollHeight - innerHeight;
+        const alpha = 0.1 + 0.4 * Math.min(scrollY / max || 0, 1);
+        document.documentElement.style.setProperty("--glow-alpha", alpha);
+      }
+      addEventListener("scroll", updateGlow);
+      updateGlow();
+    </script>
+  </body>
+</html>

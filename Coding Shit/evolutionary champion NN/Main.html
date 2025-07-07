@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <style>
+            body {
+                font: 14px/1.4 sans-serif;
+                margin: 2rem;
+            }
+        </style>
+    </head>
+    <body>
+        <script type="module">
+            const DEFAULTS = { popSize: 128, generations: 100 }
+            const INIT_META = { wAmp: 0.5, sProb: 0.15, nAdj: 1 }
+            const MAX_NEURONS = 64,
+                MIN_NEURONS = 1,
+                MAX_HIDDEN = 6,
+                MIN_HIDDEN = 0,
+                META_SCALE = 0.25
+            const randFloat = (a, b) => Math.random() * (b - a) + a
+            const clamp = (v, a, b) => (v < a ? a : v > b ? b : v)
+            function shuffle(a) {
+                for (let i = a.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1))
+                    ;[a[i], a[j]] = [a[j], a[i]]
+                }
+                return a
+            }
+            const randMat = (r, c) =>
+                Array.from({ length: r }, () =>
+                    Array.from({ length: c }, () => randFloat(-1, 1))
+                )
+            function dot(v, m) {
+                const o = Array(m[0].length).fill(0)
+                for (let j = 0; j < m[0].length; j++)
+                    for (let i = 0; i < v.length; i++) o[j] += v[i] * m[i][j]
+                return o
+            }
+            const tanh = Math.tanh
+            class MLP {
+                constructor(sizes, w = null, meta = null) {
+                    this.sizes = [...sizes]
+                    this.layers = this.sizes.length - 1
+                    this.weights =
+                        w ||
+                        this.sizes
+                            .slice(0, -1)
+                            .map((sz, i) => randMat(sz, this.sizes[i + 1]))
+                    this.meta = meta ? { ...meta } : { ...INIT_META }
+                }
+                forward(v) {
+                    for (let l = 0; l < this.layers; l++) {
+                        v = dot(v, this.weights[l])
+                        if (l < this.layers - 1) v = v.map(tanh)
+                    }
+                    return v
+                }
+                act(inp) {
+                    return this.forward(inp)
+                }
+                clone() {
+                    const w = this.weights.map((m) => m.map((r) => r.slice()))
+                    return new MLP(this.sizes, w, { ...this.meta })
+                }
+                mutate() {
+                    this.mutateMeta()
+                    this.mutateWeights()
+                    this.mutateStruct()
+                }
+                mutateMeta() {
+                    this.meta.wAmp = clamp(
+                        this.meta.wAmp +
+                            randFloat(
+                                -this.meta.wAmp * META_SCALE,
+                                this.meta.wAmp * META_SCALE
+                            ),
+                        1e-3,
+                        2
+                    )
+                    this.meta.sProb = clamp(
+                        this.meta.sProb + randFloat(-META_SCALE, META_SCALE),
+                        0,
+                        1
+                    )
+                    this.meta.nAdj = Math.max(
+                        1,
+                        Math.min(
+                            4,
+                            this.meta.nAdj + Math.round(randFloat(-1, 1))
+                        )
+                    )
+                }
+                mutateWeights() {
+                    const a = this.meta.wAmp
+                    for (const mat of this.weights)
+                        for (let i = 0; i < mat.length; i++)
+                            for (let j = 0; j < mat[i].length; j++)
+                                mat[i][j] = clamp(
+                                    mat[i][j] + randFloat(-a, a),
+                                    -1,
+                                    1
+                                )
+                }
+                mutateStruct() {
+                    if (Math.random() > this.meta.sProb) return
+                    ;(Math.random() < 0.3
+                        ? this.mutateLayer
+                        : this.mutateNeurons
+                    ).call(this)
+                    this.layers = this.sizes.length - 1
+                }
+                mutateNeurons() {
+                    const h = this.sizes.length - 2
+                    if (!h) return
+                    const L = 1 + Math.floor(Math.random() * h)
+                    const delta =
+                        (Math.random() < 0.5 ? -1 : 1) * this.meta.nAdj
+                    const newN = clamp(
+                        this.sizes[L] + delta,
+                        MIN_NEURONS,
+                        MAX_NEURONS
+                    )
+                    if (newN === this.sizes[L]) return
+                    const inM = this.weights[L - 1],
+                        outM = this.weights[L]
+                    if (delta > 0) {
+                        for (const row of inM)
+                            for (let k = 0; k < delta; k++)
+                                row.push(randFloat(-1, 1))
+                        for (let k = 0; k < delta; k++)
+                            outM.push(
+                                Array.from({ length: this.sizes[L + 1] }, () =>
+                                    randFloat(-1, 1)
+                                )
+                            )
+                    } else {
+                        inM.forEach((r) => r.splice(newN))
+                        outM.splice(newN)
+                    }
+                    this.sizes[L] = newN
+                }
+                mutateLayer() {
+                    const add = Math.random() < 0.5
+                    if (add && this.sizes.length - 2 >= MAX_HIDDEN) return
+                    if (!add && this.sizes.length - 2 <= MIN_HIDDEN) return
+                    if (add) {
+                        const idx =
+                            1 +
+                            Math.floor(Math.random() * (this.sizes.length - 1))
+                        const w = Math.floor(randFloat(MIN_NEURONS, 16))
+                        const W1 = randMat(this.sizes[idx - 1], w),
+                            W2 = randMat(w, this.sizes[idx])
+                        this.weights.splice(idx - 1, 1, W1, W2)
+                        this.sizes.splice(idx, 0, w)
+                    } else {
+                        const idx =
+                            1 +
+                            Math.floor(Math.random() * (this.sizes.length - 2))
+                        const fused = randMat(
+                            this.sizes[idx - 1],
+                            this.sizes[idx + 1]
+                        )
+                        this.weights.splice(idx - 1, 2, fused)
+                        this.sizes.splice(idx, 1)
+                    }
+                }
+            }
+
+            const mse = (net, data) =>
+                data.reduce((acc, { inp, tgt }) => {
+                    const o = net.act(inp)
+                    let s = 0
+                    for (let i = 0; i < tgt.length; i++) {
+                        const d = o[i] - tgt[i]
+                        s += d * d
+                    }
+                    return acc + s
+                }, 0) / data.length
+            function duel(A, B, data) {
+                const eA = mse(A, data),
+                    eB = mse(B, data)
+                if (eA === eB) return Math.random() < 0.5 ? A : B
+                return eA < eB ? A : B
+            }
+
+            function evolve({
+                arff,
+                training,
+                inputs,
+                outputs,
+                hidden = [8, 8],
+                ...rest
+            }) {
+                if (arff) {
+                    const p = parseARFF(arff)
+                    console.log(p.outputs)
+                    training = p.training
+                    inputs = inputs ?? p.inputs
+                    outputs = outputs ?? p.outputs
+                }
+                if (!training || !training.length)
+                    throw Error('Need training data')
+                inputs ??= training[0].inp.length
+                outputs ??= training[0].tgt.length
+                const P = { ...DEFAULTS, ...rest }
+                let pop = Array.from(
+                    { length: P.popSize },
+                    () => new MLP([inputs, ...hidden, outputs])
+                )
+                for (let g = 1; g <= P.generations; g++) {
+                    let bracket = shuffle([...pop])
+                    while (bracket.length > 1) {
+                        const nxt = []
+                        for (let i = 0; i < bracket.length; i += 2)
+                            nxt.push(duel(bracket[i], bracket[i + 1], training))
+                        bracket = nxt
+                    }
+                    const champ = bracket[0]
+                    champ.lastError = mse(champ, training)
+                    console.log(
+                        `Gen ${g}: hidden=${champ.sizes.slice(
+                            1,
+                            -1
+                        )} | MSE=${champ.lastError.toFixed(4)}`
+                    )
+                    pop = [champ]
+                    while (pop.length < P.popSize) {
+                        const kid = champ.clone()
+                        kid.mutate()
+                        pop.push(kid)
+                    }
+                }
+                return pop[0]
+            }
+        </script>
+    </body>
+</html>

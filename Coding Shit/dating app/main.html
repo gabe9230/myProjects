@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>FreeMatch – Prototype v1.4 (evo‑only)</title>
+        <style>
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                font-family: system-ui, Helvetica, Arial, sans-serif;
+                background: #fafafa;
+                display: flex;
+                justify-content: center;
+                align-items: start;
+                padding: 2rem;
+            }
+            #app {
+                width: 100%;
+                max-width: 480px;
+            }
+            h2 {
+                margin-top: 0;
+                margin-bottom: 0.5rem;
+            }
+            #profileCard {
+                border: 1px solid #ddd;
+                border-radius: 16px;
+                background: #fff;
+                padding: 1.25rem;
+                margin-bottom: 1rem;
+                min-height: 220px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+            }
+            #profileCard p {
+                margin: 0.25rem 0;
+            }
+            .btnRow {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 1rem;
+            }
+            button {
+                flex: 1 1 45%;
+                padding: 0.6rem 0;
+                border: none;
+                border-radius: 8px;
+                font-size: 1rem;
+                cursor: pointer;
+            }
+            .yes {
+                background: #4caf50;
+                color: #fff;
+            }
+            .no {
+                background: #f44336;
+                color: #fff;
+                margin-right: 0.5rem;
+            }
+            #admin {
+                margin-top: 2rem;
+                text-align: center;
+            }
+            #admin button {
+                background: #2196f3;
+                color: #fff;
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+            input {
+                width: 100%;
+                padding: 0.4rem;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                margin-top: 0.25rem;
+            }
+            label {
+                font-size: 0.85rem;
+                color: #555;
+            }
+            #loader {
+                display: none;
+                text-align: center;
+                margin-top: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <div id="loader">⏳ Training model…</div>
+            <div id="profileCard" hidden>
+                <h2 id="pName"></h2>
+                <p id="pAge"></p>
+                <p id="pBio"></p>
+                <div class="btnRow">
+                    <button class="no" id="btnNo">✕</button>
+                    <button class="yes" id="btnYes">❤</button>
+                </div>
+            </div>
+            <div id="admin">
+                <label>User‑ID (0‑1999)</label>
+                <input
+                    id="uidInput"
+                    type="number"
+                    min="0"
+                    max="1999"
+                    value="0"
+                />
+                <button id="startBtn">Start swiping</button>
+                <button id="retrainBtn">Retrain NN (admin)</button>
+            </div>
+        </div>
+
+        <script type="module">
+            // ================ Utility helpers ==========================
+            const randFloat = (a, b) => Math.random() * (b - a) + a
+            const clamp = (v, a, b) => (v < a ? a : v > b ? b : v)
+            const shuffle = (a) => {
+                for (let i = a.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1))
+                    ;[a[i], a[j]] = [a[j], a[i]]
+                }
+                return a
+            }
+            const tanh = Math.tanh
+            const sigmoid = (x) => 1 / (1 + Math.exp(-x))
+            const add = (a, b) => a.map((v, i) => v + b[i])
+            const randMat = (r, c) =>
+                Array.from({ length: r }, () =>
+                    Array.from({ length: c }, () => randFloat(-1, 1))
+                )
+            // ==================================================================
+            const DEFAULTS = { popSize: 48, generations: 30 }
+            const INIT_META = { wAmp: 0.4, sProb: 0.15, nAdj: 2 }
+
+            class MLP {
+                constructor(sizes, w = null, meta = null) {
+                    this.sizes = [...sizes]
+                    this.layers = this.sizes.length - 1
+                    this.weights =
+                        w ||
+                        this.sizes
+                            .slice(0, -1)
+                            .map((sz, i) => randMat(sz, this.sizes[i + 1]))
+                    this.biases = this.sizes
+                        .slice(1)
+                        .map((n) => Array(n).fill(0))
+                    this.meta = meta ? { ...meta } : { ...INIT_META }
+                }
+                forward(v) {
+                    for (let l = 0; l < this.layers; l++) {
+                        v = add(dot(v, this.weights[l]), this.biases[l])
+                        if (l < this.layers - 1) v = v.map(tanh)
+                    }
+                    return v // raw output (will be squashed by caller)
+                }
+                clone() {
+                    const w = this.weights.map((m) => m.map((r) => r.slice()))
+                    const b = this.biases.map((r) => r.slice())
+                    const copy = new MLP(this.sizes, w, { ...this.meta })
+                    copy.biases = b
+                    return copy
+                }
+                mutate(fullMeta = true) {
+                    if (fullMeta) this.mutateMeta()
+                    this.mutateWeights()
+                    this.mutateStruct()
+                }
+                mutateMeta() {
+                    this.meta.wAmp = clamp(
+                        this.meta.wAmp +
+                            randFloat(
+                                -this.meta.wAmp * 0.25,
+                                this.meta.wAmp * 0.25
+                            ),
+                        1e-3,
+                        2
+                    )
+                    this.meta.sProb = clamp(
+                        this.meta.sProb + randFloat(-0.25, 0.25),
+                        0,
+                        1
+                    )
+                    this.meta.nAdj = Math.max(
+                        1,
+                        Math.min(
+                            4,
+                            this.meta.nAdj + Math.round(randFloat(-1, 1))
+                        )
+                    )
+                }
+                mutateWeights() {
+                    const a = this.meta.wAmp
+                    for (let l = 0; l < this.layers; l++) {
+                        for (let i = 0; i < this.weights[l].length; i++)
+                            for (let j = 0; j < this.weights[l][i].length; j++)
+                                this.weights[l][i][j] = clamp(
+                                    this.weights[l][i][j] + randFloat(-a, a),
+                                    -1,
+                                    1
+                                )
+                        for (let j = 0; j < this.biases[l].length; j++)
+                            this.biases[l][j] = clamp(
+                                this.biases[l][j] + randFloat(-a, a),
+                                -1,
+                                1
+                            )
+                    }
+                }
+                mutateStruct() {
+                    if (Math.random() > this.meta.sProb) return
+                    ;(Math.random() < 0.3
+                        ? this.mutateLayer
+                        : this.mutateNeurons
+                    ).call(this)
+                    this.layers = this.sizes.length - 1
+                    // reset biases to correct sizes (zero init for simplicity)
+                    this.biases = this.sizes
+                        .slice(1)
+                        .map((n) => Array(n).fill(0))
+                }
+                mutateNeurons() {
+                    const h = this.sizes.length - 2
+                    if (!h) return
+                    const L = 1 + Math.floor(Math.random() * h)
+                    const delta =
+                        (Math.random() < 0.5 ? -1 : 1) * this.meta.nAdj
+                    const newN = clamp(this.sizes[L] + delta, 1, 64)
+                    if (newN === this.sizes[L]) return
+                    // resize weight matrices
+                    const inM = this.weights[L - 1],
+                        outM = this.weights[L]
+                    if (delta > 0) {
+                        for (const row of inM)
+                            for (let k = 0; k < delta; k++)
+                                row.push(randFloat(-1, 1))
+                        for (let k = 0; k < delta; k++)
+                            outM.push(
+                                Array.from({ length: this.sizes[L + 1] }, () =>
+                                    randFloat(-1, 1)
+                                )
+                            )
+                    } else {
+                        inM.forEach((r) => r.splice(newN))
+                        outM.splice(newN)
+                    }
+                    this.sizes[L] = newN
+                }
+                mutateLayer() {
+                    const h = this.sizes.length - 2
+                    const add = Math.random() < 0.5
+                    if (add && h >= 6) return
+                    if (!add && h <= 0) return
+                    if (add) {
+                        const idx =
+                            1 +
+                            Math.floor(Math.random() * (this.sizes.length - 1))
+                        const w = Math.floor(randFloat(1, 16))
+                        const W1 = randMat(this.sizes[idx - 1], w),
+                            W2 = randMat(w, this.sizes[idx])
+                        this.weights.splice(idx - 1, 1, W1, W2)
+                        this.sizes.splice(idx, 0, w)
+                    } else {
+                        const idx =
+                            1 +
+                            Math.floor(Math.random() * (this.sizes.length - 2))
+                        const fused = randMat(
+                            this.sizes[idx - 1],
+                            this.sizes[idx + 1]
+                        )
+                        this.weights.splice(idx - 1, 2, fused)
+                        this.sizes.splice(idx, 1)
+                    }
+                }
+            }
+
+            // ------ linear algebra util used inside MLP ----------------
+            function dot(v, m) {
+                const rows = m.length,
+                    cols = m[0].length
+                const use = Math.min(rows, v.length)
+                const out = Array(cols).fill(0)
+                for (let j = 0; j < cols; j++)
+                    for (let i = 0; i < use; i++) out[j] += v[i] * m[i][j]
+                return out
+            }
+
+            // ==================== Loss & duel ==========================
+            const mse = (net, data) =>
+                data.reduce((acc, { inp, tgt }) => {
+                    const p = sigmoid(net.forward(inp)[0])
+                    const d = p - tgt[0]
+                    return acc + d * d
+                }, 0) / data.length
+            const duel = (A, B, data) => {
+                const eA = mse(A, data),
+                    eB = mse(B, data)
+                if (eA === eB) return Math.random() < 0.5 ? A : B
+                return eA < eB ? A : B
+            }
+
+            // ================= Demo data & swipes =====================
+            const TOTAL_PROFILES = 2000
+            const PROFILES = []
+            const SWIPES = {}
+            const randFrom = (arr) =>
+                arr[Math.floor(Math.random() * arr.length)]
+            function genProfiles(n = TOTAL_PROFILES) {
+                const names = [
+                    'Alex',
+                    'Sam',
+                    'Jamie',
+                    'Taylor',
+                    'Jordan',
+                    'Casey',
+                    'Quinn',
+                    'Riley',
+                    'Morgan',
+                    'Cameron',
+                ]
+                const bios = [
+                    'Love hiking and coffee',
+                    'Tech enthusiast',
+                    'Musician and gamer',
+                    'Foodie explorer',
+                    'Dog person',
+                    'Bookworm',
+                    'Fitness fan',
+                    'Artist at heart',
+                    'Traveler',
+                    'Film buff',
+                ]
+                for (let i = 0; i < n; i++) {
+                    PROFILES.push({
+                        id: i,
+                        name: `${randFrom(names)} ${String.fromCharCode(
+                            65 + (i % 26)
+                        )}.`,
+                        age: 18 + Math.floor(Math.random() * 22),
+                        bio: randFrom(bios),
+                    })
+                    SWIPES[i] = {}
+                }
+            }
+            function seedSwipeHistory(samplesPerUser = 40) {
+                const k = 4 // slope – higher ⇒ stronger age preference
+                for (const u of PROFILES) {
+                    const s = new Set()
+                    while (s.size < samplesPerUser) {
+                        const vid = Math.floor(Math.random() * PROFILES.length)
+                        if (vid === u.id) continue
+                        const ageDiff = Math.abs(
+                            PROFILES[u.id].age - PROFILES[vid].age
+                        )
+                        const pLike = Math.exp(-ageDiff / k) // 0–1
+                        SWIPES[u.id][vid] = Math.random() < pLike ? 1 : 0
+                        s.add(vid)
+                    }
+                }
+            }
+            function profileToVec(a, b) {
+                return [
+                    (a.age - 18) / 22,
+                    (b.age - 18) / 22,
+                    a.bio === b.bio ? 1 : 0, // same bio category
+                    a.name[0] === b.name[0] ? 1 : 0, // same initial
+                ]
+            }
+            const MAX_PAIRS = 5000
+            function buildTraining() {
+                const data = []
+                for (const uid in SWIPES)
+                    for (const vid in SWIPES[uid])
+                        data.push({
+                            inp: profileToVec(PROFILES[uid], PROFILES[vid]),
+                            tgt: [SWIPES[uid][vid]],
+                        })
+                if (data.length > MAX_PAIRS) {
+                    shuffle(data)
+                    return data.slice(0, MAX_PAIRS)
+                }
+                return data
+            }
+
+            // ================= Evolutionary training ==================
+            let MODEL = null
+            function trainNN(cb) {
+                document.getElementById('loader').style.display = 'block'
+                const training = buildTraining()
+                shuffle(training)
+                const split = Math.floor(training.length * 0.9)
+                const trainSet = training.slice(0, split),
+                    valSet = training.slice(split)
+                const seedMeta = { wAmp: 0.4, sProb: 0.15, nAdj: 2 }
+                const popSize = DEFAULTS.popSize,
+                    generations = DEFAULTS.generations,
+                    FREEZE_META_GENS = 5
+                let pop = Array.from(
+                    { length: popSize },
+                    () => new MLP([2, 8, 8, 1], null, seedMeta)
+                )
+
+                function auc(net, data) {
+                    const ranked = data
+                        .map((d) => ({
+                            p: sigmoid(net.forward(d.inp)[0]),
+                            y: d.tgt[0],
+                        }))
+                        .sort((a, b) => b.p - a.p)
+                    let tp = 0,
+                        fp = 0,
+                        prevTp = 0,
+                        prevFp = 0,
+                        area = 0
+                    const P = ranked.filter((r) => r.y).length,
+                        N = ranked.length - P
+                    for (const r of ranked) {
+                        if (r.y) tp++
+                        else fp++
+                        area += ((fp - prevFp) * (tp + prevTp)) / 2
+                        prevTp = tp
+                        prevFp = fp
+                    }
+                    return 1 - area / (P * N)
+                }
+
+                function genLoop(g) {
+                    if (g > generations) {
+                        MODEL = pop[0]
+                        document.getElementById('loader').style.display = 'none'
+                        console.log(
+                            `Final MSE (train) = ${mse(MODEL, trainSet).toFixed(
+                                4
+                            )}`
+                        )
+                        console.log(
+                            `Final MSE (valid) = ${mse(MODEL, valSet).toFixed(
+                                4
+                            )}`
+                        )
+                        console.log(
+                            `AUC(valid) = ${auc(MODEL, valSet).toFixed(3)}`
+                        )
+                        cb()
+                        return
+                    }
+                    let bracket = shuffle([...pop])
+                    while (bracket.length > 1) {
+                        const nxt = []
+                        for (let i = 0; i < bracket.length - 1; i += 2)
+                            nxt.push(duel(bracket[i], bracket[i + 1], training))
+                        bracket = nxt
+                    }
+                    const champ = bracket[0]
+                    pop = [champ]
+                    while (pop.length < popSize) {
+                        const kid = champ.clone()
+                        kid.mutate(g >= FREEZE_META_GENS)
+                        pop.push(kid)
+                    }
+                    console.log(
+                        `Gen ${g}: MSE = ${mse(champ, training).toFixed(4)}`
+                    )
+                    setTimeout(() => genLoop(g + 1), 0)
+                }
+                genLoop(1)
+            }
+
+            // ==================== UI handlers ==========================
+            let currentUser = null,
+                candidates = [],
+                idx = 0
+            function nextProfile() {
+                if (idx >= candidates.length) {
+                    alert('Out of matches for now!')
+                    return
+                }
+                const p = PROFILES[candidates[idx]]
+                document.getElementById('pName').textContent = p.name
+                document.getElementById('pAge').textContent = `Age: ${p.age}`
+                document.getElementById('pBio').textContent = p.bio
+            }
+            function startSession(uid) {
+                currentUser = uid
+                idx = 0
+                const scores = PROFILES.map((v) => ({
+                    id: v.id,
+                    score:
+                        uid === v.id
+                            ? -Infinity
+                            : sigmoid(
+                                  MODEL.forward(
+                                      profileToVec(PROFILES[uid], v)
+                                  )[0]
+                              ),
+                }))
+                scores.sort((a, b) => b.score - a.score)
+                candidates = scores.slice(0, 100).map((x) => x.id)
+                document.getElementById('profileCard').hidden = false
+                nextProfile()
+            }
+            function swipe(val) {
+                const viewed = candidates[idx]
+                SWIPES[currentUser][viewed] = val
+                idx++
+                nextProfile()
+            }
+
+            // DOM wires
+            document.getElementById('btnYes').onclick = () => swipe(1)
+            document.getElementById('btnNo').onclick = () => swipe(0)
+            document.getElementById('startBtn').onclick = () =>
+                startSession(
+                    parseInt(
+                        document.getElementById('uidInput').value || '0',
+                        10
+                    )
+                )
+            document.getElementById('retrainBtn').onclick = () =>
+                trainNN(() => alert('Re‑trained!'))
+
+            // ------- Kick-off demo ------------------------------------
+            genProfiles()
+            seedSwipeHistory()
+            trainNN(() => console.log('Model ready'))
+        </script>
+    </body>
+</html>
