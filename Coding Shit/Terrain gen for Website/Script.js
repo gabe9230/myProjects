@@ -5,28 +5,57 @@
 const canvas = document.getElementById('c')
 const ctx = canvas.getContext('2d')
 
-const width = 1028
-const height = 1028
-const drawSize = 1
-const blurDist = 5
-const blurSteps = 3
-
+const width = 2056
+const height = 2056
+const drawSize = 1 //needs to be an int >= 1
+const blurDist = 4
+const blurSteps = 8
+const controls = []
+const camSpeed = 2
+const zoomSpeed = 1
+let camX = Math.floor(width / 4) //Camera left
+let camY = Math.floor(height / 4) //Camera top
+let camZ = 0.5 // (camZ*drawSize*256)**2 = how many pixels the viewport covers
+let camZMin = 0.5
 /****************  helper functions  ****************/
 const lerp = (a, b, t) => a + (b - a) * t
-
-function Blur(x,y,hm) {
+function clamp(num, min, max) {
+    if (num < min) {
+        return min
+    } else if (num > max) {
+        return max
+    }
+    return num
+}
+function Blur(x, y, hm) {
     let blurVal = 0
     for (let dx = -blurDist; dx < blurDist; dx++) {
         for (let dy = -blurDist; dy < blurDist; dy++) {
-            if (hm[x+dx]) {
-                if (hm[x+dx][y+dy]) {
-                    blurVal += hm[x+dx][y+dy]
+            if (hm[x + dx]) {
+                if (hm[x + dx][y + dy]) {
+                    blurVal += hm[x + dx][y + dy]
+                } else {
+                    if (0 <= x + dx && x + dx <= width) {
+                        if (y + dy >= height) {
+                            blurVal += hm[x + dx][y + dy - height]
+                        }
+                        if (y + dy <= 0) {
+                            blurVal += hm[x + dx][y + dy + height]
+                        }
+                    } else if (0 <= y + dy && x + dy <= height) {
+                        if (x + dx >= width) {
+                            blurVal += hm[x + dx - width][y + dy]
+                        }
+                        if (x + dx <= 0) {
+                            blurVal += hm[x + dx + width][y + dy]
+                        }
+                    }
                 }
             }
         }
     }
-    blurVal /= ((blurDist*2)+1)**2
-    return blurVal * 1.25 //to adjust for darkening
+    blurVal /= (blurDist * 2 + 1) ** 2
+    return blurVal * (1 + blurDist / 20) //to adjust for darkening
 }
 
 /****************  Noise functions  ****************/
@@ -76,7 +105,7 @@ function layeredNoise(u, v, octaves = 4) {
 }
 
 /****************  cellular-automata landmask  ****************/
-function generateLandmask(cw, ch, fillProb = 0.45, steps = 5) {
+function generateLandmask(cw, ch, fillProb = 0.4, steps = 5) {
     let grid = Array.from({ length: ch }, () =>
         Array.from({ length: cw }, () => Math.random() < fillProb)
     )
@@ -113,7 +142,7 @@ function generateLandmask(cw, ch, fillProb = 0.45, steps = 5) {
 
 /****************  heightmap synthesis  ****************/
 function generateHeightmap(w = 512, h = 512) {
-    const scale = 0.125
+    const scale = 1 / 16
     const cw = Math.ceil(w * scale),
         ch = Math.ceil(h * scale)
     const landmask = generateLandmask(cw, ch)
@@ -129,10 +158,30 @@ function generateHeightmap(w = 512, h = 512) {
         }
     }
     for (let i = 0; i < blurSteps; i++) {
-        for (let y = 1; y < h-1; y++) {
-            for (let x = 1; x < w-1; x++) {
-                hm[x][y] = Blur(x,y,hm)
+        for (let y = 1; y < h - 1; y++) {
+            for (let x = 1; x < w - 1; x++) {
+                hm[x][y] = Blur(x, y, hm)
             }
+        }
+    }
+    for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+            hm[x][y] = (hm[x][y] - 0) / (0.5 - 0)
+        }
+    }
+    // for (let y = 1; y < h - 1; y++) {
+    //     for (let x = 1; x < w - 1; x++) {
+    //         const angle = 0.8 // radians → SW-NE
+    //         const ridge = Math.sin((x * Math.cos(angle) + y * Math.sin(angle)) * 0.005) * 0.3
+    //         hm[x][y] += ridge
+    //     }
+    // }
+    for (let y = 1; y < h - 1; y++) {
+        for (let x = 1; x < w - 1; x++) {
+            let h = hm[x][y]
+            h = Math.pow(h, 1)
+            h = clamp(h, 0, 1)
+            hm[x][y] = h
         }
     }
     return hm
@@ -142,20 +191,22 @@ const map = generateHeightmap(width, height)
 
 /****************  rendering  ****************/
 function drawHeightmap(hm) {
-    const h = hm.length,
-        w = hm[0].length,
-        outW = w * drawSize,
-        outH = h * drawSize
-    const img = ctx.createImageData(outW, outH)
+    let v
+    const h = hm.length
+    const w = hm[0].length
+    const outW = w * drawSize
+    const outH = h * drawSize
 
-    for (let y = 0; y < h; y++) {
-        for (let x = 0; x < w; x++) {
-            const v = Math.floor(hm[y][x] * 255)
+    const img = ctx.createImageData(outW, outH)
+    ctx.clearRect(0, 0, width, height)
+    for (let y = camY; y < camY + camZ * drawSize * 256; y++) {
+        for (let x = camX; x < camX + camZ * drawSize * 256; x++) {
+            v = Math.floor(hm[Math.floor(camZ * y)][Math.floor(camZ * x)] * 255)
             for (let dy = 0; dy < drawSize; dy++) {
                 for (let dx = 0; dx < drawSize; dx++) {
-                    const px = x * drawSize + dx
-                    const py = y * drawSize + dy
-                    const idx = (py * outW + px) * 4 // RGBA stride
+                    const px = x * drawSize + dx - camX * drawSize
+                    const py = y * drawSize + dy - camY * drawSize
+                    const idx = (py * outW + px) * 4
                     img.data[idx] = img.data[idx + 1] = img.data[idx + 2] = v
                     img.data[idx + 3] = 255
                 }
@@ -164,11 +215,106 @@ function drawHeightmap(hm) {
     }
     ctx.putImageData(img, 0, 0)
 }
+/****************  Event Listeners  ****************/
+document.addEventListener('keydown', function (event) {
+    if (event.key === 'w') {
+        controls[0] = true
+    }
+    if (event.key === 'a') {
+        controls[1] = true
+    }
+    if (event.key === 's') {
+        controls[2] = true
+    }
+    if (event.key === 'd') {
+        controls[3] = true
+    }
+    if (event.key === 'q') {
+        controls[4] = true
+    }
+    if (event.key === 'e') {
+        controls[5] = true
+    }
+})
 
+document.addEventListener('keyup', function (event) {
+    if (event.key === 'w') {
+        controls[0] = false
+    }
+    if (event.key === 'a') {
+        controls[1] = false
+    }
+    if (event.key === 's') {
+        controls[2] = false
+    }
+    if (event.key === 'd') {
+        controls[3] = false
+    }
+    if (event.key === 'q') {
+        controls[4] = false
+    }
+    if (event.key === 'e') {
+        controls[5] = false
+    }
+})
+
+
+/****************  Game Loop  ****************/
+function handleInputs() {
+    if (controls[0]) {
+        if (camY - camSpeed >= 0) {
+            camY -= camSpeed
+        }
+    }
+    if (controls[1]) {
+        if (camX - camSpeed >= 0) {
+            camX -= camSpeed
+        }
+    }
+    if (controls[2]) {
+        if (camSpeed + camY + camZ * drawSize * 256 <= height) {
+            camY += camSpeed
+        }
+    }
+    if (controls[3]) {
+        if (camSpeed + camX + camZ * drawSize * 256 <= width) {
+            camX += camSpeed
+        }
+    }
+    if (controls[4]) {
+        if (camZ - zoomSpeed/100 >= camZMin) {
+        camZ -= zoomSpeed/100
+        // console.log(camZ)
+        }
+    }
+    if (controls[5]) {
+        if (camX+((camZ + zoomSpeed/100)* drawSize * 256) <= width && camY+((camZ + zoomSpeed/100)* drawSize * 256) <= height ) {
+        camZ += zoomSpeed/100
+        // console.log(camZ)
+        } else if (camX - ((camZ + zoomSpeed/100)* drawSize * 256) >= 0) {
+            camZ += zoomSpeed/100
+            camX -= camSpeed
+            console.log("!")
+        }
+         else if (camY - ((camZ + zoomSpeed/100)* drawSize * 256) >= 0) {
+            camZ += zoomSpeed/100
+            camY -= camSpeed
+        }
+    }
+}
+function mainLoop() {
+    handleInputs()
+    drawHeightmap(map)
+}
+document.addEventListener('keyup', function (event) {
+    controls[event.key] = false
+})
 function setupCanvas() {
-    canvas.width = width * drawSize
-    canvas.height = height * drawSize
+    canvas.width = width * drawSize * camZ
+    canvas.height = height * drawSize * camZ
 }
 
 setupCanvas()
 drawHeightmap(map)
+
+setInterval(mainLoop, 20)

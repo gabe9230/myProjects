@@ -11,7 +11,6 @@
         --darkblue: #416788;
         --gold: #f5b700; /* soft gold for glow */
         --text-dark: #2b2b2b;
-        --max-width: 1200px;
       }
       *,
       *::before,
@@ -28,7 +27,6 @@
         background: var(--thistle);
         overflow-x: hidden;
       }
-      /* fixed hypnotic canvas backdrop */
       #bgCanvas {
         position: fixed;
         inset: 0;
@@ -44,7 +42,6 @@
         transition: box-shadow 0.15s linear;
       }
       main {
-        max-width: var(--max-width);
         margin-inline: auto;
         padding: 0 1.25rem;
       }
@@ -76,6 +73,7 @@
         background: rgba(255, 255, 255, 0.5);
         backdrop-filter: blur(4px);
         border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        white-space: nowrap;
       }
       nav {
         display: flex;
@@ -83,10 +81,10 @@
         justify-content: space-between;
         max-width: var(--max-width);
         margin-inline: auto;
-        padding: 1rem 1.25rem;
+        padding: 1rem 10rem;
       }
       .logo {
-        font-size: 1.5rem;
+        font-size: 2rem;
         text-decoration: none;
         color: var(--darkblue);
         font-weight: 700;
@@ -101,6 +99,7 @@
         color: var(--text-dark);
         font-weight: 500;
         position: relative;
+        align-self: center;
       }
       .nav-links a::after {
         content: "";
