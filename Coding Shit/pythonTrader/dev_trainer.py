@@ -76,11 +76,13 @@ def simulate_equity(genome, start, end):
 		still_open, closed, opened = [], 0, 0
 		for pos in open_pos:
 			tkr, ts = TICKERS[pos['i']], pd.Timestamp(date)
-			if ts not in price_data[tkr].index: continue
 			price = price_data[tkr].loc[ts]
-			pnl = (price - pos['entry']) / pos['entry']
-			if bool(pos['short']): pnl *= -1
-			days = (ts - pos['date']).days
+			if isinstance(price, pd.Series):  # <- fix Series/float ambiguity
+				price = float(price.iloc[0])
+			pnl = float((price - pos['entry']) / pos['entry'])
+			if bool(pos['short']):
+				pnl *= -1
+			days = int((ts - pos['date']).days)
 			if pnl >= TP or pnl <= -SL or days >= MAX_HOLD:
 				logging.info(f"✔️ Closed {tkr} @ {ts.date()}: PnL={pnl:.4f}, held={days}d")
 				balance *= (1 + pnl); closed += 1
