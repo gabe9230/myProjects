@@ -1,0 +1,82 @@
+2025-10-07 20:06:42,639 [INFO] Backtest from 2025-01-01 to 2025-03-01
+2025-10-07 20:06:50,156 [INFO] Saved equity curve to historical_equity.csv
+2025-10-07 20:06:50,161 [INFO] Saved trades to historical_trades.csv (289 rows)
+2025-10-07 20:06:50,381 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-07 20:08:01,139 [INFO] Backtest from 2025-01-01 to 2025-10-01
+2025-10-07 20:08:11,693 [ERROR] 
+1 Failed download:
+2025-10-07 20:08:11,693 [ERROR] ['GOOGL']: Timeout('Failed to perform, curl: (28) Connection timed out after 10005 milliseconds. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-10-07 20:08:11,695 [WARNING] Skipping GOOGL: Could not download data for GOOGL
+2025-10-07 20:08:20,346 [INFO] Saved equity curve to historical_equity.csv
+2025-10-07 20:08:20,361 [INFO] Saved trades to historical_trades.csv (1518 rows)
+2025-10-07 20:08:20,570 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-07 22:18:42,871 [WARNING] FINNHUB_API_KEY not set. News headlines will be 'N/A'.
+2025-10-07 22:18:42,897 [INFO] Backtest from 2025-01-01 to 2025-09-30
+2025-10-07 22:18:42,897 [ERROR] Fatal error: Best genome file 'best_genome.npy' not found. Run dev_trainer.py first to generate it.
+Traceback (most recent call last):
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 660, in <module>
+    main()
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 628, in main
+    genome = load_best_genome(BEST_GENOME_PATH)
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 210, in load_best_genome
+    raise FileNotFoundError(
+FileNotFoundError: Best genome file 'best_genome.npy' not found. Run dev_trainer.py first to generate it.
+2025-10-08 01:51:18,869 [WARNING] FINNHUB_API_KEY not set. News headlines will be 'N/A'.
+2025-10-08 01:51:18,869 [INFO] Backtest from 2015-01-01 to 2018-12-31
+2025-10-08 01:51:28,631 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:51:28,759 [INFO] Saved trades to historical_trades.csv (8088 rows)
+2025-10-08 01:51:29,886 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 01:52:46,077 [WARNING] FINNHUB_API_KEY not set. News headlines will be 'N/A'.
+2025-10-08 01:52:46,078 [INFO] Backtest from 2020-01-01 to 2023-12-31
+2025-10-08 01:52:55,323 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:52:55,464 [INFO] Saved trades to historical_trades.csv (8462 rows)
+2025-10-08 01:52:55,873 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 01:55:10,623 [INFO] Backtest from 2020-01-01 to 2023-12-31
+2025-10-08 01:55:20,650 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:55:20,726 [INFO] Saved trades to historical_trades.csv (8462 rows)
+2025-10-08 01:55:20,963 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 01:55:55,579 [ERROR] Fatal error: day is out of range for month
+Traceback (most recent call last):
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 664, in <module>
+    main()
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 626, in main
+    end_date = datetime.strptime(args.end, "%Y-%m-%d").date() if args.end else default_end
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\_strptime.py", line 534, in _strptime
+    julian = datetime_date(year, month, day).toordinal() - \
+ValueError: day is out of range for month
+2025-10-08 01:56:25,870 [INFO] Backtest from 2025-01-01 to 2025-09-30
+2025-10-08 01:56:33,615 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:56:33,643 [INFO] Saved trades to historical_trades.csv (1480 rows)
+2025-10-08 01:56:33,984 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 01:58:31,853 [INFO] Backtest from 2025-09-25 to 2025-09-30
+2025-10-08 01:58:38,051 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:58:38,054 [INFO] Saved trades to historical_trades.csv (23 rows)
+2025-10-08 01:58:38,839 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 02:00:37,967 [WARNING] FINNHUB_API_KEY not set. News headlines will be 'N/A'.
+2025-10-08 02:00:37,969 [INFO] Backtest from 2015-01-01 to 2018-12-31
+2025-10-08 02:00:46,707 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 02:00:46,803 [INFO] Saved trades to historical_trades.csv (8087 rows)
+2025-10-08 02:00:47,096 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 02:01:10,560 [INFO] Backtest from 2025-01-01 to 2025-09-30
+2025-10-08 02:01:19,278 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 02:01:19,294 [INFO] Saved trades to historical_trades.csv (1480 rows)
+2025-10-08 02:01:19,505 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 02:08:18,056 [INFO] Loading genome from best_genome.npy
+2025-10-08 02:08:18,056 [INFO] Genome loaded (80 weights).
+2025-10-08 02:08:18,057 [INFO] Polling live data at 2025-10-08T09:08:18.057320+00:00
+2025-10-08 02:08:24,158 [INFO] Generated 10 signals.
+2025-10-08 02:08:24,170 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90         27,838.47        179.72     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96         27,726.84        149.91     +0.00
+   AMD     SHORT -0.194          -0.587 211.49         19,434.69         91.89     +0.00
+  AAPL      LONG +0.154          +0.995 256.49         15,417.75         60.11     +0.00
+   JNJ      LONG +0.099          +0.637 188.90          9,864.21         52.22     +0.00
+   JPM      LONG +0.097          +0.626 307.70          9,702.36         31.53     +0.00
+  INTC      LONG +0.083          +0.535  37.19          8,286.96        222.86     +0.00
+   UNH      LONG +0.083          +0.533 363.82          8,261.37         22.71     +0.00
+    PG      LONG +0.077          +0.495 152.56          7,670.59         50.28     +0.00
+  TSLA      LONG +0.059          +0.383 432.87          5,932.39         13.70     +0.00
+2025-10-08 02:08:24,173 [INFO] Live runner stopped.

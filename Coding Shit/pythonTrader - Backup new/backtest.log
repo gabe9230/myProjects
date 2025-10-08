@@ -1,0 +1,76 @@
+2025-10-07 20:06:42,639 [INFO] Backtest from 2025-01-01 to 2025-03-01
+2025-10-07 20:06:50,156 [INFO] Saved equity curve to historical_equity.csv
+2025-10-07 20:06:50,161 [INFO] Saved trades to historical_trades.csv (289 rows)
+2025-10-07 20:06:50,381 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-07 20:08:01,139 [INFO] Backtest from 2025-01-01 to 2025-10-01
+2025-10-07 20:08:11,693 [ERROR] 
+1 Failed download:
+2025-10-07 20:08:11,693 [ERROR] ['GOOGL']: Timeout('Failed to perform, curl: (28) Connection timed out after 10005 milliseconds. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-10-07 20:08:11,695 [WARNING] Skipping GOOGL: Could not download data for GOOGL
+2025-10-07 20:08:20,346 [INFO] Saved equity curve to historical_equity.csv
+2025-10-07 20:08:20,361 [INFO] Saved trades to historical_trades.csv (1518 rows)
+2025-10-07 20:08:20,570 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-07 22:18:42,871 [WARNING] FINNHUB_API_KEY not set. News headlines will be 'N/A'.
+2025-10-07 22:18:42,897 [INFO] Backtest from 2025-01-01 to 2025-09-30
+2025-10-07 22:18:42,897 [ERROR] Fatal error: Best genome file 'best_genome.npy' not found. Run dev_trainer.py first to generate it.
+Traceback (most recent call last):
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 660, in <module>
+    main()
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 628, in main
+    genome = load_best_genome(BEST_GENOME_PATH)
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 210, in load_best_genome
+    raise FileNotFoundError(
+FileNotFoundError: Best genome file 'best_genome.npy' not found. Run dev_trainer.py first to generate it.
+2025-10-08 01:51:18,869 [WARNING] FINNHUB_API_KEY not set. News headlines will be 'N/A'.
+2025-10-08 01:51:18,869 [INFO] Backtest from 2015-01-01 to 2018-12-31
+2025-10-08 01:51:28,631 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:51:28,759 [INFO] Saved trades to historical_trades.csv (8088 rows)
+2025-10-08 01:51:29,886 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 01:52:46,077 [WARNING] FINNHUB_API_KEY not set. News headlines will be 'N/A'.
+2025-10-08 01:52:46,078 [INFO] Backtest from 2020-01-01 to 2023-12-31
+2025-10-08 01:52:55,323 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:52:55,464 [INFO] Saved trades to historical_trades.csv (8462 rows)
+2025-10-08 01:52:55,873 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 01:55:10,623 [INFO] Backtest from 2020-01-01 to 2023-12-31
+2025-10-08 01:55:20,650 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:55:20,726 [INFO] Saved trades to historical_trades.csv (8462 rows)
+2025-10-08 01:55:20,963 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 01:55:55,579 [ERROR] Fatal error: day is out of range for month
+Traceback (most recent call last):
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 664, in <module>
+    main()
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader\main.py", line 626, in main
+    end_date = datetime.strptime(args.end, "%Y-%m-%d").date() if args.end else default_end
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\_strptime.py", line 568, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.10_3.10.3056.0_x64__qbz5n2kfra8p0\lib\_strptime.py", line 534, in _strptime
+    julian = datetime_date(year, month, day).toordinal() - \
+ValueError: day is out of range for month
+2025-10-08 01:56:25,870 [INFO] Backtest from 2025-01-01 to 2025-09-30
+2025-10-08 01:56:33,615 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:56:33,643 [INFO] Saved trades to historical_trades.csv (1480 rows)
+2025-10-08 01:56:33,984 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 01:58:31,853 [INFO] Backtest from 2025-09-25 to 2025-09-30
+2025-10-08 01:58:38,051 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 01:58:38,054 [INFO] Saved trades to historical_trades.csv (23 rows)
+2025-10-08 01:58:38,839 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 02:00:37,967 [WARNING] FINNHUB_API_KEY not set. News headlines will be 'N/A'.
+2025-10-08 02:00:37,969 [INFO] Backtest from 2015-01-01 to 2018-12-31
+2025-10-08 02:00:46,707 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 02:00:46,803 [INFO] Saved trades to historical_trades.csv (8087 rows)
+2025-10-08 02:00:47,096 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 02:01:10,560 [INFO] Backtest from 2025-01-01 to 2025-09-30
+2025-10-08 02:01:19,278 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 02:01:19,294 [INFO] Saved trades to historical_trades.csv (1480 rows)
+2025-10-08 02:01:19,505 [INFO] Saved equity curve plot to historical_equity.png
+2025-10-08 02:08:29,948 [ERROR] Fatal error: End date must be after start date.
+Traceback (most recent call last):
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader - Backup new\main.py", line 668, in <module>
+    main()
+  File "F:\GithubRepo\myProjects\Coding Shit\pythonTrader - Backup new\main.py", line 633, in main
+    raise ValueError("End date must be after start date.")
+ValueError: End date must be after start date.
+2025-10-08 02:08:38,149 [INFO] Backtest from 2025-01-01 to 2025-09-30
+2025-10-08 02:08:46,449 [INFO] Saved equity curve to historical_equity.csv
+2025-10-08 02:08:46,467 [INFO] Saved trades to historical_trades.csv (1480 rows)
+2025-10-08 02:08:46,702 [INFO] Saved equity curve plot to historical_equity.png
