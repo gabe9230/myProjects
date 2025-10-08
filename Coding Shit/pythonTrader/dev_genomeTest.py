@@ -1,279 +1,161 @@
-# walkforward_trainer.py
-# Full trainer with walk-forward backtesting using actual signal features
+from __future__ import annotations
 
-from datetime import date, timedelta, datetime
 import os
-import numpy as np
-import pandas as pd
-import random
-import yfinance as yf
+from pathlib import Path
+
 import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
-# Constants
-TRAIN_DAYS = 180
-TEST_DAYS = 60
-START_DATE = date(2010, 1, 1)
-END_DATE = date(2015, 6, 30)
-TICKERS = [
-    "AAPL", "MSFT", "GOOGL", "AMZN", "TSLA", "NVDA", "AMD", "INTC", "XOM", "CVX",
-    "BP", "JPM", "BAC", "WMT", "PG", "UNH", "DIS", "V", "KO", "JNJ",
-]
-GENOME_LENGTH = len(TICKERS) * 6
-POPULATION_SIZE = 50
-GENERATIONS = 10
-TOURNAMENT_SIZE = 3
-CROSSOVER_RATE = 0.8
-MUTATION_RATE = 0.1
-MUTATION_SIGMA = 0.1
-TP_PERCENT = 0.05
-SL_PERCENT = 0.03
-MAX_HOLD_DAYS = 3
-
-# Global data cache
-price_data = {}
-short_ma_data = {}
-long_ma_data = {}
-vol5_data = {}
-vol_spike_data = {}
+import dev_trainer as trainer
 
 
-def generate_walk_forward_windows(start_date, end_date, train_days, test_days):
-    windows = []
-    current_start = start_date
-    while True:
-        train_start = current_start
-        train_end = train_start + timedelta(days=train_days - 1)
-        test_start = train_end + timedelta(days=1)
-        test_end = test_start + timedelta(days=test_days - 1)
-        if test_end > end_date:
-            break
-        windows.append((train_start, train_end, test_start, test_end))
-        current_start += timedelta(days=test_days)
-    return windows
+EQUITY_PLOT_PATH = Path("genome_equity.png")
 
 
-walk_forward_splits = generate_walk_forward_windows(START_DATE, END_DATE, TRAIN_DAYS, TEST_DAYS)
-
-# Load price data
-print("Downloading historical data...")
-for tkr in TICKERS:
-    df = yf.download(
-        tkr,
-        start=START_DATE - timedelta(days=100),
-        end=END_DATE + timedelta(days=TEST_DAYS),
-        progress=False,
-    )
-    if df.empty:
-        continue
-    price_data[tkr] = df["Close"].copy()
-    short_ma_data[tkr] = df["Close"].rolling(window=10).mean()
-    long_ma_data[tkr] = df["Close"].rolling(window=50).mean()
-    returns = df["Close"].pct_change()
-    vol5_data[tkr] = returns.rolling(5).std()
-    vol_spike_data[tkr] = vol5_data[tkr] / vol5_data[tkr].shift(1)
-
-
-def simulate_equity_curve(genome, start, end, verbose=False, return_dates=False):
-    balance = 1000.0
-    equity_curve = []
-    date_points = [] if return_dates else None
-    open_positions = []
-    dates = pd.date_range(start=start, end=end)
-    EPS = 1e-4
-    BIAS = 0.001
-
-    sent_w = genome[0::6]
-    geo_w = genome[1::6]
-    short_w = genome[2::6]
-    long_w = genome[3::6]
-    vol5_w = genome[4::6]
-    vol_spike_w = genome[5::6]
-
-    for current_date in dates:
-        # Close positions
-        still_open = []
-        for pos in open_positions:
-            tkr = TICKERS[pos["i"]]
-            if current_date not in price_data[tkr].index:
-                if verbose:
-                    print(f"Missing price for {tkr} on {current_date}")
-                continue
-            price = price_data[tkr].get(current_date, np.nan)
-            if np.isnan(price):
-                continue
-            pnl = (price - pos["entry"]) / pos["entry"]
-            if pos["short"]:
-                pnl *= -1
-            days_held = (current_date.date() - pos["date"]).days
-            if pnl >= TP_PERCENT or pnl <= -SL_PERCENT or days_held >= MAX_HOLD_DAYS:
-                if verbose:
-                    print(
-                        f"Closing position in {tkr} on {current_date}: pnl={pnl:.4f}, held={days_held}d"
-                    )
-                balance *= (1 + pnl)
-            else:
-                still_open.append(pos)
-        open_positions = still_open
-
-        # Open new positions
-        for i, tkr in enumerate(TICKERS):
-            if current_date not in price_data[tkr].index:
-                continue
-            price = price_data[tkr][current_date]
-            short_ma = short_ma_data[tkr].get(current_date, price)
-            long_ma = long_ma_data[tkr].get(current_date, price)
-            vol5 = vol5_data[tkr].get(current_date, 0.0)
-            vol_spike = vol_spike_data[tkr].get(current_date, 0.0)
-
-            if verbose:
-                print(
-                    f"{tkr} signal weights: short={short_w[i]:.3f}, long={long_w[i]:.3f}, vol5={vol5_w[i]:.3f}, vol_spike={vol_spike_w[i]:.3f}"
-                )
-            signal = (
-                short_w[i] * (price - short_ma) * 100
-                + long_w[i] * (price - long_ma) * 100
-                + vol5_w[i] * vol5 * 10
-                + vol_spike_w[i] * vol_spike * 10
-                + BIAS
-            )
-            if verbose:
-                print(f"{current_date} {tkr} signal: {signal:.6f}")
-            # if abs(signal) < EPS: continue  # allow weak signals to trade
-            if any(p["i"] == i for p in open_positions):
-                continue
-            open_positions.append({"i": i, "entry": price, "date": current_date, "short": signal < 0})
-
-        equity_curve.append(balance)
-        if return_dates:
-            date_points.append(current_date)
-
-    if len(equity_curve) == 0:
-        return np.array([1000.0, 1000.0])
-    if len(equity_curve) <= 2 or balance == 1000.0:
-        curve = np.array([1000.0, 1000.0])
-    else:
-        curve = np.array(equity_curve)
-
-    if return_dates:
-        return curve, pd.DatetimeIndex(date_points)
-    return curve
-
-
-def evaluate_individual(genome):
-    all_returns = []
-    for _, _, test_start, test_end in walk_forward_splits:
-        eq = simulate_equity_curve(genome, test_start, test_end)
-        ret = np.diff(eq) / eq[:-1]
-        if len(ret) < 2:
-            continue
-        all_returns.extend(ret)
-    if not all_returns:
-        return -np.inf
-    mean = np.mean(all_returns)
-    std = np.std(all_returns) + 1e-6
-    return mean / std * 100
-
-
-def make_random_individual():
-    return np.random.uniform(-1, 1, GENOME_LENGTH)
-
-
-def tournament_selection(pop):
-    return max(random.sample(pop, TOURNAMENT_SIZE), key=lambda x: x[1])[0].copy()
-
-
-def single_point_crossover(p1, p2):
-    if random.random() > CROSSOVER_RATE:
-        return p1.copy(), p2.copy()
-    pt = random.randint(1, GENOME_LENGTH - 1)
-    return np.concatenate([p1[:pt], p2[pt:]]), np.concatenate([p2[:pt], p1[pt:]])
-
-
-def mutate(genome):
-    for i in range(GENOME_LENGTH):
-        if random.random() < MUTATION_RATE:
-            genome[i] += random.gauss(0, MUTATION_SIGMA)
-            genome[i] = float(np.clip(genome[i], -1.0, 1.0))
-
-
-def run_evolution():
-    population = [(make_random_individual(), 0.0) for _ in range(POPULATION_SIZE)]
-    population = [(g, evaluate_individual(g)) for g, _ in population]
-    population.sort(key=lambda x: x[1], reverse=True)
-    print(f"Initial best: {population[0][1]:.2f}")
-
-    for gen in range(1, GENERATIONS + 1):
-        new_pop = [population[0], population[1]]
-        while len(new_pop) < POPULATION_SIZE:
-            p1 = tournament_selection(population)
-            p2 = tournament_selection(population)
-            c1, c2 = single_point_crossover(p1, p2)
-            mutate(c1)
-            mutate(c2)
-            new_pop.append((c1, evaluate_individual(c1)))
-            if len(new_pop) < POPULATION_SIZE:
-                new_pop.append((c2, evaluate_individual(c2)))
-        population = sorted(new_pop, key=lambda x: x[1], reverse=True)
-        print(
-            f"Gen {gen:02d} -> best: {population[0][1]:.2f}, avg: {np.mean([f for _, f in population]):.2f}"
+def load_best_genome(path: Path = Path("best_genome.npy")) -> np.ndarray:
+    if not path.exists():
+        raise FileNotFoundError(
+            f"Saved genome file '{path}' not found. Run dev_trainer.py to train and persist a genome."
         )
-    return population[0]
-
-
-def load_saved_genome(path="best_genome.npy"):
-    if not os.path.exists(path):
-        raise FileNotFoundError(f"Saved genome file '{path}' not found. Run dev_trainer.py first.")
     genome = np.load(path)
-    if genome.shape[0] != GENOME_LENGTH:
-        raise ValueError(
-            f"Genome length mismatch: expected {GENOME_LENGTH}, found {genome.shape[0]} in '{path}'"
-        )
+    expected = trainer.GENOME_LENGTH
+    if genome.shape[0] != expected:
+        raise ValueError(f"Genome length mismatch: expected {expected}, found {genome.shape[0]} in '{path}'")
     return genome
 
 
-if __name__ == "__main__":
-    random.seed(42)
-    np.random.seed(42)
+def equity_with_dates(genome: np.ndarray, start, end):
+    equity, stats = trainer.simulate_equity(genome, start, end)
+    dates = pd.date_range(start=start, end=end, freq="D")
+    length = min(len(equity), len(dates))
+    return equity[:length], dates[:length], stats
 
-    saved_path = "best_genome.npy"
-    if os.path.exists(saved_path):
-        best = load_saved_genome(saved_path)
-        fitness = evaluate_individual(best)
-        print("Loaded saved genome from best_genome.npy")
-    else:
-        best, fitness = run_evolution()
-        np.save(saved_path, best)
-        print("Saved newly evolved genome to best_genome.npy")
 
-    print("\nBest genome fitness:", fitness)
-    print("Slice:", best[:10])
+def format_ratio(value: float) -> str:
+    if value is None or not np.isfinite(value):
+        return "n/a"
+    return f"{value:.3f}"
 
-    equity_curve, equity_dates = simulate_equity_curve(
-        best, START_DATE, END_DATE, verbose=False, return_dates=True
+
+def format_pct(value: float) -> str:
+    if value is None or not np.isfinite(value):
+        return "n/a"
+    return f"{value * 100:.2f}%"
+
+
+def describe_metrics(label: str, metrics: dict) -> None:
+    print(f"\n=== {label} ===")
+    print(
+        f"Avg Sharpe: {format_ratio(metrics.get('avg_sharpe'))} | "
+        f"Avg Return: {format_pct(metrics.get('avg_return'))} | "
+        f"Worst DD: {format_pct(metrics.get('worst_drawdown'))} | "
+        f"Trades: {metrics.get('trades', 'n/a')} | "
+        f"Windows: {metrics.get('windows', 'n/a')}"
     )
-    if len(equity_curve) > 1:
-        final_balance = float(equity_curve[-1])
-        total_return = (final_balance / float(equity_curve[0]) - 1.0) * 100
-        print(f"Full-period ending balance: {final_balance:.2f} ({total_return:.2f}% return)")
+    if "full_period_return" in metrics:
+        print(
+            f"Full-period Return: {format_pct(metrics.get('full_period_return'))} | "
+            f"Full-period Drawdown: {format_pct(metrics.get('full_period_drawdown'))} | "
+            f"Full-period Trades: {metrics.get('full_period_trades', 'n/a')}"
+        )
 
-        plt.figure(figsize=(10, 4))
-        plt.plot(equity_dates, equity_curve, label="Equity")
-        plt.title("Equity Curve")
-        plt.xlabel("Date")
-        plt.ylabel("Balance")
-        plt.grid(True, alpha=0.3)
-        plt.tight_layout()
-        output_path = "genome_equity.png"
-        plt.savefig(output_path)
-        plt.close()
-        print(f"Saved equity curve plot to {output_path}")
+
+def plot_equity(dates: pd.DatetimeIndex, equity: np.ndarray) -> None:
+    if len(equity) == 0:
+        print("No equity data to plot.")
+        return
+
+    plt.figure(figsize=(11, 4))
+    plt.plot(dates, equity, label="Equity")
+
+    holdout_start = pd.Timestamp(trainer.HOLDOUT_START)
+    holdout_end = pd.Timestamp(trainer.HOLDOUT_END)
+    test_start = pd.Timestamp(trainer.TEST_START)
+    test_end = pd.Timestamp(trainer.TEST_END)
+
+    # Test span first so holdout overlay remains visible
+    plt.axvspan(
+        test_start,
+        test_end,
+        alpha=0.08,
+        color="#003f5c",
+        label=f"Test ({trainer.TEST_START:%Y}-{trainer.TEST_END:%Y})",
+    )
+    plt.axvspan(
+        holdout_start,
+        holdout_end,
+        alpha=0.18,
+        color="#ffa600",
+        label=f"Holdout ({trainer.HOLDOUT_START:%Y}-{trainer.HOLDOUT_END:%Y})",
+    )
+
+    plt.title("Equity Curve (Holdout + Test)")
+    plt.xlabel("Date")
+    plt.ylabel("Balance")
+    plt.grid(alpha=0.3)
+    plt.legend()
+    plt.tight_layout()
+    plt.savefig(EQUITY_PLOT_PATH)
+    plt.close()
+    print(f"Saved equity curve plot to {EQUITY_PLOT_PATH}")
+
+
+def max_drawdown(equity: np.ndarray) -> float:
+    if equity.size < 2:
+        return 0.0
+    peak = np.maximum.accumulate(equity)
+    drawdowns = (peak - equity) / peak
+    drawdowns = drawdowns[np.isfinite(drawdowns)]
+    return float(drawdowns.max()) if drawdowns.size else 0.0
+
+
+def main() -> None:
+    trainer.load_data()
+    genome = load_best_genome()
+
+    training_metrics = trainer.compute_training_metrics(genome)
+    holdout_metrics = trainer.evaluate_holdout(genome)
+    test_metrics = trainer.evaluate_test(genome)
+
+    describe_metrics(
+        f"Training Metrics ({trainer.TRAIN_START:%Y}-{trainer.TRAIN_END:%Y})",
+        training_metrics,
+    )
+    describe_metrics(
+        f"Holdout Metrics ({trainer.HOLDOUT_START:%Y}-{trainer.HOLDOUT_END:%Y})",
+        holdout_metrics,
+    )
+    describe_metrics(
+        f"Test Metrics ({trainer.TEST_START:%Y}-{trainer.TEST_END:%Y})",
+        test_metrics,
+    )
+
+    equity_full, dates_full, _ = equity_with_dates(genome, trainer.TEST_START, trainer.TEST_END)
+
+    if equity_full.size:
+        final_balance = float(equity_full[-1])
+        total_return = float(equity_full[-1] / equity_full[0] - 1.0)
+        max_dd = max_drawdown(equity_full)
+        print(
+            f"\nOut-of-sample ending balance ({trainer.TEST_START:%Y}-{trainer.TEST_END:%Y}): {final_balance:.2f} | "
+            f"Return: {format_pct(total_return)} | Max Drawdown: {format_pct(max_dd)}"
+        )
+        plot_equity(dates_full, equity_full)
     else:
-        print("Equity curve too short to plot.")
+        print("No equity curve generated for combined period.")
 
-    try:
-        input("Press Enter to exit...")
-    except EOFError:
-        pass
+    if os.name == "nt":
+        os.system("pause")
+    else:
+        try:
+            input("Press Enter to exit...")
+        except EOFError:
+            pass
+
+
+if __name__ == "__main__":
+    main()
