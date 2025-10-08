@@ -1,0 +1,19 @@
+2025-10-08 13:27:51,405 [INFO] Loaded session state from F:\GithubRepo\myProjects\Coding Shit\pythonTrader\live_state.json (balance 50000.24)
+2025-10-08 13:27:51,406 [INFO] Ignoring --capital 100000.00 in favour of saved initial capital 50000.00.
+2025-10-08 13:27:51,406 [INFO] Loading genome from best_genome.npy
+2025-10-08 13:27:51,407 [INFO] Genome loaded (80 weights).
+2025-10-08 13:27:51,407 [INFO] Polling live data at 2025-10-08T20:27:51.407248+00:00
+2025-10-08 13:27:59,321 [INFO] Generated 10 signals.
+2025-10-08 13:27:59,325 [INFO] 
+ticker direction weight signal_strength  price capital_allocated profile_balance cycle_pnl ticker_pnl total_pnl target_shares sentiment
+   WMT     SHORT -0.264          -1.000 103.05         13,214.00       50,016.02     15.78     -15.80     16.02        128.23     +0.00
+  AMZN      LONG +0.149          +1.000 225.38          7,443.32       50,016.02     15.78       5.96     16.02         33.03     +0.00
+  NVDA      LONG +0.149          +1.000 189.09          7,443.32       50,016.02     15.78       0.79     16.02         39.36     +0.00
+   BAC      LONG +0.149          +1.000  49.86          7,443.32       50,016.02     15.78       3.74     16.02        149.28     +0.00
+  INTC     SHORT -0.141          -0.532  37.45          7,032.75       50,016.02     15.78      -6.48     16.02        187.79     +0.00
+   CVX     SHORT -0.125          -0.474 153.70          6,260.48       50,016.02     15.78       4.33     16.02         40.73     +0.00
+   XOM     SHORT -0.120          -0.453 114.15          5,981.77       50,016.02     15.78      -4.81     16.02         52.40     +0.00
+  AAPL     SHORT -0.100          -0.380 258.08          5,023.02       50,016.02     15.78      -0.98     16.02         19.46     +0.00
+   AMD      LONG +0.087          +0.584 236.85          4,350.39       50,016.02     15.78      26.76     16.02         18.37     +0.00
+   UNH      LONG +0.086          +0.580 370.20          4,316.91       50,016.02     15.78       2.27     16.02         11.66     +0.00
+2025-10-08 13:27:59,326 [INFO] Cycle PnL: 15.78 | Portfolio balance: 50,016.02 | Total PnL: 16.02

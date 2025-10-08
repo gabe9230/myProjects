@@ -96,3 +96,1120 @@ ticker direction weight signal_strength  price capital_allocated target_shares s
   MSFT      LONG +0.074          +0.426 523.97            370.87          0.71     +0.00
   INTC      LONG +0.068          +0.393  37.19            342.20          9.20     +0.00
    DIS      LONG +0.065          +0.372 112.54            324.30          2.88     +0.00
+2025-10-08 02:13:41,497 [INFO] Loading genome from best_genome.npy
+2025-10-08 02:13:41,497 [INFO] Genome loaded (80 weights).
+2025-10-08 02:13:41,498 [INFO] Polling live data at 2025-10-08T09:13:41.497808+00:00
+2025-10-08 02:13:47,396 [INFO] Generated 10 signals.
+2025-10-08 02:13:47,400 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.302          -1.000 154.90          1,510.05          9.75     +0.00
+   AMD     SHORT -0.231          -0.764 211.49          1,153.14          5.45     +0.00
+  NVDA     SHORT -0.217          -0.720 184.96          1,086.81          5.88     +0.00
+  AAPL      LONG +0.166          +1.000 256.49            831.38          3.24     +0.00
+   UNH      LONG +0.098          +0.586 363.82            487.51          1.34     +0.00
+   JNJ      LONG +0.096          +0.578 188.90            480.43          2.54     +0.00
+  TSLA      LONG +0.081          +0.486 432.87            404.02          0.93     +0.00
+  MSFT      LONG +0.078          +0.472 523.97            392.26          0.75     +0.00
+  INTC      LONG +0.077          +0.462  37.19            383.76         10.32     +0.00
+   DIS      LONG +0.066          +0.395 112.54            328.15          2.92     +0.00
+2025-10-08 02:14:34,284 [INFO] Loading genome from best_genome.npy
+2025-10-08 02:14:34,284 [INFO] Genome loaded (80 weights).
+2025-10-08 02:14:34,285 [INFO] Polling live data at 2025-10-08T09:14:34.285884+00:00
+2025-10-08 02:14:41,047 [INFO] Generated 10 signals.
+2025-10-08 02:14:41,055 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.288          -0.850 154.90          1,439.09          9.29     +0.00
+  NVDA     SHORT -0.281          -0.829 184.96          1,404.37          7.59     +0.00
+   AMD     SHORT -0.181          -0.535 211.49            906.53          4.29     +0.00
+  AAPL      LONG +0.153          +0.960 256.49            764.15          2.98     +0.00
+   JNJ      LONG +0.098          +0.617 188.90            490.90          2.60     +0.00
+   JPM      LONG +0.096          +0.605 307.70            481.76          1.57     +0.00
+   UNH      LONG +0.086          +0.540 363.82            430.18          1.18     +0.00
+  INTC      LONG +0.079          +0.499  37.19            397.30         10.68     +0.00
+    PG      LONG +0.076          +0.475 152.56            378.04          2.48     +0.00
+  TSLA      LONG +0.059          +0.372 432.87            295.79          0.68     +0.00
+2025-10-08 02:15:00,458 [INFO] Loading genome from best_genome.npy
+2025-10-08 02:15:00,459 [INFO] Genome loaded (80 weights).
+2025-10-08 02:15:00,459 [INFO] Polling live data at 2025-10-08T09:15:00.459708+00:00
+2025-10-08 02:15:07,514 [INFO] Generated 10 signals.
+2025-10-08 02:15:07,522 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 02:20:00,466 [INFO] Polling live data at 2025-10-08T09:20:00.466766+00:00
+2025-10-08 02:20:02,298 [INFO] Generated 10 signals.
+2025-10-08 02:20:02,304 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 02:25:00,469 [INFO] Polling live data at 2025-10-08T09:25:00.469080+00:00
+2025-10-08 02:25:02,329 [INFO] Generated 10 signals.
+2025-10-08 02:25:02,335 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 02:30:00,472 [INFO] Polling live data at 2025-10-08T09:30:00.472832+00:00
+2025-10-08 02:30:02,245 [INFO] Generated 10 signals.
+2025-10-08 02:30:02,250 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 02:35:00,476 [INFO] Polling live data at 2025-10-08T09:35:00.476234+00:00
+2025-10-08 02:35:02,170 [INFO] Generated 10 signals.
+2025-10-08 02:35:02,173 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 02:40:00,481 [INFO] Polling live data at 2025-10-08T09:40:00.481340+00:00
+2025-10-08 02:40:02,364 [INFO] Generated 10 signals.
+2025-10-08 02:40:02,368 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 02:45:00,483 [INFO] Polling live data at 2025-10-08T09:45:00.483764+00:00
+2025-10-08 02:45:02,383 [INFO] Generated 10 signals.
+2025-10-08 02:45:02,388 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 02:50:00,490 [INFO] Polling live data at 2025-10-08T09:50:00.490407+00:00
+2025-10-08 02:50:02,352 [INFO] Generated 10 signals.
+2025-10-08 02:50:02,359 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 02:55:00,493 [INFO] Polling live data at 2025-10-08T09:55:00.493913+00:00
+2025-10-08 02:55:02,143 [INFO] Generated 10 signals.
+2025-10-08 02:55:02,147 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:00:00,497 [INFO] Polling live data at 2025-10-08T10:00:00.497495+00:00
+2025-10-08 03:00:02,202 [INFO] Generated 10 signals.
+2025-10-08 03:00:02,205 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:05:00,500 [INFO] Polling live data at 2025-10-08T10:05:00.500423+00:00
+2025-10-08 03:05:02,228 [INFO] Generated 10 signals.
+2025-10-08 03:05:02,232 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:10:00,503 [INFO] Polling live data at 2025-10-08T10:10:00.503003+00:00
+2025-10-08 03:10:02,404 [INFO] Generated 10 signals.
+2025-10-08 03:10:02,410 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:15:00,516 [INFO] Polling live data at 2025-10-08T10:15:00.516578+00:00
+2025-10-08 03:15:02,367 [INFO] Generated 10 signals.
+2025-10-08 03:15:02,370 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:20:00,521 [INFO] Polling live data at 2025-10-08T10:20:00.521536+00:00
+2025-10-08 03:20:02,412 [INFO] Generated 10 signals.
+2025-10-08 03:20:02,417 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:25:00,530 [INFO] Polling live data at 2025-10-08T10:25:00.530377+00:00
+2025-10-08 03:25:02,679 [INFO] Generated 10 signals.
+2025-10-08 03:25:02,684 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:30:00,536 [INFO] Polling live data at 2025-10-08T10:30:00.536927+00:00
+2025-10-08 03:30:02,407 [INFO] Generated 10 signals.
+2025-10-08 03:30:02,412 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:35:00,541 [INFO] Polling live data at 2025-10-08T10:35:00.541650+00:00
+2025-10-08 03:35:02,227 [INFO] Generated 10 signals.
+2025-10-08 03:35:02,230 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:40:00,545 [INFO] Polling live data at 2025-10-08T10:40:00.545524+00:00
+2025-10-08 03:40:02,423 [INFO] Generated 10 signals.
+2025-10-08 03:40:02,427 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:45:00,553 [INFO] Polling live data at 2025-10-08T10:45:00.553046+00:00
+2025-10-08 03:45:02,540 [INFO] Generated 10 signals.
+2025-10-08 03:45:02,546 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:50:00,558 [INFO] Polling live data at 2025-10-08T10:50:00.558089+00:00
+2025-10-08 03:50:02,177 [INFO] Generated 10 signals.
+2025-10-08 03:50:02,180 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 03:55:00,565 [INFO] Polling live data at 2025-10-08T10:55:00.565013+00:00
+2025-10-08 03:55:02,227 [INFO] Generated 10 signals.
+2025-10-08 03:55:02,230 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:00:00,570 [INFO] Polling live data at 2025-10-08T11:00:00.570357+00:00
+2025-10-08 04:00:02,349 [INFO] Generated 10 signals.
+2025-10-08 04:00:02,353 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:05:00,573 [INFO] Polling live data at 2025-10-08T11:05:00.573126+00:00
+2025-10-08 04:05:02,275 [INFO] Generated 10 signals.
+2025-10-08 04:05:02,278 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:10:00,577 [INFO] Polling live data at 2025-10-08T11:10:00.577946+00:00
+2025-10-08 04:10:02,358 [INFO] Generated 10 signals.
+2025-10-08 04:10:02,362 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:15:00,580 [INFO] Polling live data at 2025-10-08T11:15:00.580026+00:00
+2025-10-08 04:15:02,423 [INFO] Generated 10 signals.
+2025-10-08 04:15:02,426 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:20:00,591 [INFO] Polling live data at 2025-10-08T11:20:00.591785+00:00
+2025-10-08 04:20:02,276 [INFO] Generated 10 signals.
+2025-10-08 04:20:02,279 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:25:00,597 [INFO] Polling live data at 2025-10-08T11:25:00.597537+00:00
+2025-10-08 04:25:02,284 [INFO] Generated 10 signals.
+2025-10-08 04:25:02,288 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:30:00,602 [INFO] Polling live data at 2025-10-08T11:30:00.602528+00:00
+2025-10-08 04:30:02,349 [INFO] Generated 10 signals.
+2025-10-08 04:30:02,352 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:35:00,604 [INFO] Polling live data at 2025-10-08T11:35:00.604332+00:00
+2025-10-08 04:35:02,273 [INFO] Generated 10 signals.
+2025-10-08 04:35:02,277 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:40:00,618 [INFO] Polling live data at 2025-10-08T11:40:00.618981+00:00
+2025-10-08 04:40:02,278 [INFO] Generated 10 signals.
+2025-10-08 04:40:02,281 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:45:00,630 [INFO] Polling live data at 2025-10-08T11:45:00.630083+00:00
+2025-10-08 04:45:02,480 [INFO] Generated 10 signals.
+2025-10-08 04:45:02,484 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:50:00,643 [INFO] Polling live data at 2025-10-08T11:50:00.643392+00:00
+2025-10-08 04:50:02,348 [INFO] Generated 10 signals.
+2025-10-08 04:50:02,351 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 04:55:00,658 [INFO] Polling live data at 2025-10-08T11:55:00.658951+00:00
+2025-10-08 04:55:02,366 [INFO] Generated 10 signals.
+2025-10-08 04:55:02,370 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:00:00,666 [INFO] Polling live data at 2025-10-08T12:00:00.666247+00:00
+2025-10-08 05:00:02,372 [INFO] Generated 10 signals.
+2025-10-08 05:00:02,375 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:05:00,675 [INFO] Polling live data at 2025-10-08T12:05:00.675616+00:00
+2025-10-08 05:05:02,506 [INFO] Generated 10 signals.
+2025-10-08 05:05:02,509 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:10:00,682 [INFO] Polling live data at 2025-10-08T12:10:00.682757+00:00
+2025-10-08 05:10:02,323 [INFO] Generated 10 signals.
+2025-10-08 05:10:02,326 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.92          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.74          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:15:00,684 [INFO] Polling live data at 2025-10-08T12:15:00.684939+00:00
+2025-10-08 05:15:06,741 [INFO] Generated 10 signals.
+2025-10-08 05:15:06,744 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:20:00,699 [INFO] Polling live data at 2025-10-08T12:20:00.699054+00:00
+2025-10-08 05:20:02,450 [INFO] Generated 10 signals.
+2025-10-08 05:20:02,454 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:25:00,705 [INFO] Polling live data at 2025-10-08T12:25:00.705833+00:00
+2025-10-08 05:25:02,385 [INFO] Generated 10 signals.
+2025-10-08 05:25:02,388 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:30:00,716 [INFO] Polling live data at 2025-10-08T12:30:00.716138+00:00
+2025-10-08 05:30:02,478 [INFO] Generated 10 signals.
+2025-10-08 05:30:02,482 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:35:00,720 [INFO] Polling live data at 2025-10-08T12:35:00.720819+00:00
+2025-10-08 05:35:02,612 [INFO] Generated 10 signals.
+2025-10-08 05:35:02,616 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:40:00,726 [INFO] Polling live data at 2025-10-08T12:40:00.726650+00:00
+2025-10-08 05:40:02,505 [INFO] Generated 10 signals.
+2025-10-08 05:40:02,509 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:45:00,739 [INFO] Polling live data at 2025-10-08T12:45:00.739361+00:00
+2025-10-08 05:45:02,602 [INFO] Generated 10 signals.
+2025-10-08 05:45:02,606 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:50:00,741 [INFO] Polling live data at 2025-10-08T12:50:00.741215+00:00
+2025-10-08 05:50:02,464 [INFO] Generated 10 signals.
+2025-10-08 05:50:02,467 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 05:55:00,747 [INFO] Polling live data at 2025-10-08T12:55:00.747120+00:00
+2025-10-08 05:55:02,334 [INFO] Generated 10 signals.
+2025-10-08 05:55:02,338 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 06:00:00,762 [INFO] Polling live data at 2025-10-08T13:00:00.762181+00:00
+2025-10-08 06:00:02,819 [INFO] Generated 10 signals.
+2025-10-08 06:00:02,822 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 06:05:00,777 [INFO] Polling live data at 2025-10-08T13:05:00.777621+00:00
+2025-10-08 06:05:13,605 [INFO] Generated 10 signals.
+2025-10-08 06:05:13,608 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 06:10:00,788 [INFO] Polling live data at 2025-10-08T13:10:00.788232+00:00
+2025-10-08 06:10:02,805 [INFO] Generated 10 signals.
+2025-10-08 06:10:02,808 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 06:15:00,790 [INFO] Polling live data at 2025-10-08T13:15:00.790376+00:00
+2025-10-08 06:15:02,592 [INFO] Generated 10 signals.
+2025-10-08 06:15:02,595 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 06:20:00,805 [INFO] Polling live data at 2025-10-08T13:20:00.805909+00:00
+2025-10-08 06:20:02,621 [INFO] Generated 10 signals.
+2025-10-08 06:20:02,625 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 06:25:00,808 [INFO] Polling live data at 2025-10-08T13:25:00.808956+00:00
+2025-10-08 06:25:02,583 [INFO] Generated 10 signals.
+2025-10-08 06:25:02,586 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.278          -0.840 154.90          1,391.93          8.99     +0.00
+  NVDA     SHORT -0.277          -0.837 184.96          1,386.34          7.50     +0.00
+   AMD     SHORT -0.194          -0.587 211.49            971.73          4.59     +0.00
+  AAPL      LONG +0.154          +0.995 256.49            770.89          3.01     +0.00
+   JNJ      LONG +0.099          +0.637 188.90            493.21          2.61     +0.00
+   JPM      LONG +0.097          +0.626 307.70            485.12          1.58     +0.00
+  INTC      LONG +0.083          +0.535  37.19            414.35         11.14     +0.00
+   UNH      LONG +0.083          +0.533 363.82            413.07          1.14     +0.00
+    PG      LONG +0.077          +0.495 152.56            383.53          2.51     +0.00
+  TSLA      LONG +0.059          +0.383 432.87            296.62          0.69     +0.00
+2025-10-08 06:30:00,815 [INFO] Polling live data at 2025-10-08T13:30:00.815990+00:00
+2025-10-08 06:30:00,937 [ERROR] $AAPL: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:01,191 [ERROR] $MSFT: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:01,416 [ERROR] $GOOGL: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:01,612 [ERROR] $AMZN: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:01,827 [ERROR] $TSLA: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:02,039 [ERROR] $NVDA: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:02,390 [ERROR] $AMD: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:02,586 [ERROR] $INTC: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:02,835 [ERROR] $XOM: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:03,319 [ERROR] $CVX: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:03,592 [ERROR] $BP: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:03,863 [ERROR] $JPM: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:04,112 [ERROR] $BAC: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:04,367 [ERROR] $WMT: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:04,669 [ERROR] $PG: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:04,962 [ERROR] $UNH: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:05,197 [ERROR] $DIS: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:05,456 [ERROR] $V: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:05,764 [ERROR] $KO: possibly delisted; no price data found  (period=1d)
+2025-10-08 06:30:06,071 [INFO] Generated 10 signals.
+2025-10-08 06:30:06,074 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.271          -0.749 154.36          1,355.59          8.78     +0.00
+  NVDA     SHORT -0.269          -0.743 186.63          1,345.17          7.21     +0.00
+   AMD     SHORT -0.210          -0.580 212.95          1,049.23          4.93     +0.00
+  AAPL      LONG +0.164          +0.994 256.48            817.98          3.19     +0.00
+   JNJ      LONG +0.104          +0.630 189.24            518.56          2.74     +0.00
+   JPM      LONG +0.103          +0.626 307.69            515.04          1.67     +0.00
+   UNH      LONG +0.088          +0.535 363.66            439.81          1.21     +0.00
+  INTC      LONG +0.088          +0.533  36.54            438.13         11.99     +0.00
+    PG      LONG +0.082          +0.500 152.54            411.01          2.69     +0.00
+  TSLA      LONG +0.062          +0.376 437.76            309.65          0.71     +0.00
+2025-10-08 06:35:00,817 [INFO] Polling live data at 2025-10-08T13:35:00.817604+00:00
+2025-10-08 06:35:02,461 [INFO] Generated 10 signals.
+2025-10-08 06:35:02,464 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.302          -0.726 153.30          1,510.43          9.85     +0.00
+   AMD     SHORT -0.242          -0.582 212.45          1,210.99          5.70     +0.00
+  NVDA     SHORT -0.206          -0.494 187.93          1,028.58          5.47     +0.00
+  AAPL      LONG +0.152          +1.000 256.62            762.08          2.97     +0.00
+    PG      LONG +0.108          +0.707 151.57            538.51          3.55     +0.00
+   JNJ      LONG +0.096          +0.631 189.22            480.93          2.54     +0.00
+  INTC      LONG +0.082          +0.537  36.10            409.16         11.33     +0.00
+   JPM      LONG +0.077          +0.503 306.01            383.18          1.25     +0.00
+   UNH      LONG +0.074          +0.488 366.55            371.77          1.01     +0.00
+  TSLA      LONG +0.059          +0.389 428.46            296.46          0.69     +0.00
+2025-10-08 06:40:00,824 [INFO] Polling live data at 2025-10-08T13:40:00.824794+00:00
+2025-10-08 06:40:02,585 [INFO] Generated 10 signals.
+2025-10-08 06:40:02,588 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.417          -0.718 153.40          2,086.80         13.60     +0.00
+   AMD     SHORT -0.333          -0.572 215.94          1,663.20          7.70     +0.00
+  AAPL      LONG +0.143          +0.978 256.28            714.22          2.79     +0.00
+    PG      LONG +0.108          +0.740 151.40            540.67          3.57     +0.00
+   JNJ      LONG +0.092          +0.633 189.15            462.45          2.44     +0.00
+  INTC      LONG +0.078          +0.532  36.68            388.72         10.60     +0.00
+   UNH      LONG +0.066          +0.449 368.08            327.83          0.89     +0.00
+   JPM      LONG +0.065          +0.446 305.58            325.62          1.07     +0.00
+  TSLA      LONG +0.057          +0.388 429.04            283.54          0.66     +0.00
+   DIS      LONG +0.054          +0.368 112.38            268.96          2.39     +0.00
+2025-10-08 06:45:00,826 [INFO] Polling live data at 2025-10-08T13:45:00.826356+00:00
+2025-10-08 06:45:02,585 [INFO] Generated 10 signals.
+2025-10-08 06:45:02,588 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.318          -0.724 153.32          1,592.46         10.39     +0.00
+   AMD     SHORT -0.251          -0.571 216.88          1,255.63          5.79     +0.00
+  NVDA     SHORT -0.180          -0.410 188.27            901.91          4.79     +0.00
+  AAPL      LONG +0.156          +1.000 256.92            780.05          3.04     +0.00
+    PG      LONG +0.110          +0.705 151.58            550.27          3.63     +0.00
+   JNJ      LONG +0.099          +0.636 188.96            496.41          2.63     +0.00
+  INTC      LONG +0.083          +0.534  36.36            416.46         11.45     +0.00
+   JPM      LONG +0.067          +0.430 305.48            335.63          1.10     +0.00
+   UNH      LONG +0.064          +0.412 369.32            321.59          0.87     +0.00
+  TSLA      LONG +0.060          +0.386 430.76            300.94          0.70     +0.00
+2025-10-08 06:50:00,831 [INFO] Polling live data at 2025-10-08T13:50:00.831125+00:00
+2025-10-08 06:50:02,802 [INFO] Generated 10 signals.
+2025-10-08 06:50:02,805 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.323          -0.711 153.51          1,617.43         10.54     +0.00
+   AMD     SHORT -0.261          -0.574 219.58          1,304.89          5.94     +0.00
+  NVDA     SHORT -0.166          -0.364 188.45            827.68          4.39     +0.00
+  AAPL      LONG +0.159          +1.000 257.33            794.06          3.09     +0.00
+    PG      LONG +0.121          +0.760 151.29            603.32          3.99     +0.00
+   JNJ      LONG +0.101          +0.635 189.06            504.31          2.67     +0.00
+  INTC      LONG +0.085          +0.533  36.51            423.05         11.59     +0.00
+  TSLA      LONG +0.061          +0.385 431.13            305.94          0.71     +0.00
+   UNH      LONG +0.058          +0.363 370.86            287.85          0.78     +0.00
+   DIS      LONG +0.056          +0.355 112.79            281.54          2.50     +0.00
+2025-10-08 06:55:00,840 [INFO] Polling live data at 2025-10-08T13:55:00.840546+00:00
+2025-10-08 06:55:02,447 [INFO] Generated 10 signals.
+2025-10-08 06:55:02,450 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.322          -0.740 153.17          1,608.63         10.50     +0.00
+   AMD     SHORT -0.255          -0.587 223.01          1,276.84          5.73     +0.00
+  NVDA     SHORT -0.173          -0.397 188.32            864.53          4.59     +0.00
+  AAPL      LONG +0.170          +1.000 257.26            847.87          3.30     +0.00
+    PG      LONG +0.138          +0.816 150.97            692.04          4.58     +0.00
+   JNJ      LONG +0.107          +0.632 189.18            536.12          2.83     +0.00
+  INTC      LONG +0.090          +0.532  36.72            451.21         12.29     +0.00
+  TSLA      LONG +0.066          +0.387 429.75            328.29          0.76     +0.00
+   UNH      LONG +0.063          +0.369 370.66            312.78          0.84     +0.00
+   DIS      LONG +0.061          +0.357 112.73            302.74          2.69     +0.00
+2025-10-08 07:00:00,842 [INFO] Polling live data at 2025-10-08T14:00:00.842222+00:00
+2025-10-08 07:00:02,633 [INFO] Generated 10 signals.
+2025-10-08 07:00:02,637 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.350          -0.767 152.96          1,749.73         11.44     +0.00
+   AMD     SHORT -0.264          -0.579 221.27          1,321.20          5.97     +0.00
+  AAPL      LONG +0.167          +1.000 257.22            833.84          3.24     +0.00
+    PG      LONG +0.137          +0.824 150.92            687.30          4.55     +0.00
+  NVDA     SHORT -0.136          -0.298 188.70            679.07          3.60     +0.00
+   JNJ      LONG +0.105          +0.632 188.56            526.79          2.79     +0.00
+  INTC      LONG +0.089          +0.532  36.69            443.77         12.10     +0.00
+   UNH      LONG +0.073          +0.437 368.49            364.41          0.99     +0.00
+  TSLA      LONG +0.064          +0.384 432.39            319.82          0.74     +0.00
+   DIS      LONG +0.060          +0.357 112.72            298.09          2.64     +0.00
+2025-10-08 07:05:00,850 [INFO] Polling live data at 2025-10-08T14:05:00.850494+00:00
+2025-10-08 07:05:02,538 [INFO] Generated 10 signals.
+2025-10-08 07:05:02,542 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.426          -0.764 152.98          2,129.96         13.92     +0.00
+   AMD     SHORT -0.324          -0.581 221.88          1,620.04          7.30     +0.00
+  AAPL      LONG +0.156          +1.000 257.34            781.81          3.04     +0.00
+    PG      LONG +0.130          +0.832 150.87            650.56          4.31     +0.00
+   JNJ      LONG +0.099          +0.636 188.75            497.14          2.63     +0.00
+  INTC      LONG +0.083          +0.532  36.76            416.06         11.32     +0.00
+   UNH      LONG +0.070          +0.448 368.11            350.25          0.95     +0.00
+  TSLA      LONG +0.060          +0.384 431.72            300.58          0.70     +0.00
+   DIS      LONG +0.055          +0.351 112.85            274.69          2.43     +0.00
+    KO      LONG +0.052          +0.333  66.32            260.28          3.92     +0.00
+2025-10-08 07:10:00,858 [INFO] Polling live data at 2025-10-08T14:10:00.858757+00:00
+2025-10-08 07:10:02,616 [INFO] Generated 10 signals.
+2025-10-08 07:10:02,620 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.414          -0.715 153.45          2,069.88         13.49     +0.00
+   AMD     SHORT -0.336          -0.580 221.58          1,680.12          7.58     +0.00
+  AAPL      LONG +0.145          +1.000 257.69            726.71          2.82     +0.00
+    PG      LONG +0.117          +0.803 151.05            583.52          3.86     +0.00
+   JNJ      LONG +0.092          +0.634 188.64            460.68          2.44     +0.00
+  INTC      LONG +0.077          +0.533  36.53            387.13         10.60     +0.00
+   UNH      LONG +0.063          +0.436 368.54            316.64          0.86     +0.00
+   JPM      LONG +0.062          +0.428 305.46            311.05          1.02     +0.00
+  TSLA      LONG +0.056          +0.385 431.55            279.57          0.65     +0.00
+   DIS      LONG +0.051          +0.352 112.83            256.07          2.27     +0.00
+2025-10-08 07:15:00,865 [INFO] Polling live data at 2025-10-08T14:15:00.865942+00:00
+2025-10-08 07:15:02,681 [INFO] Generated 10 signals.
+2025-10-08 07:15:02,684 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.341          -0.706 153.77          1,702.92         11.07     +0.00
+   AMD     SHORT -0.277          -0.575 220.01          1,385.63          6.30     +0.00
+  AAPL      LONG +0.144          +1.000 257.78            718.00          2.79     +0.00
+  NVDA     SHORT -0.132          -0.274 188.79            661.45          3.50     +0.00
+    PG      LONG +0.114          +0.794 151.10            570.42          3.78     +0.00
+   JNJ      LONG +0.091          +0.635 188.70            456.03          2.42     +0.00
+  INTC      LONG +0.077          +0.534  36.38            383.20         10.53     +0.00
+   JPM      LONG +0.070          +0.487 305.88            349.34          1.14     +0.00
+   UNH      LONG +0.065          +0.455 367.87            326.51          0.89     +0.00
+  TSLA      LONG +0.055          +0.383 432.92            274.87          0.63     +0.00
+2025-10-08 07:20:00,876 [INFO] Polling live data at 2025-10-08T14:20:00.876676+00:00
+2025-10-08 07:20:02,811 [INFO] Generated 10 signals.
+2025-10-08 07:20:02,814 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.414          -0.709 153.87          2,070.97         13.46     +0.00
+   AMD     SHORT -0.336          -0.574 219.86          1,679.03          7.64     +0.00
+  AAPL      LONG +0.142          +0.998 257.86            708.74          2.75     +0.00
+    PG      LONG +0.112          +0.785 151.15            557.60          3.69     +0.00
+   JNJ      LONG +0.089          +0.629 188.49            447.10          2.37     +0.00
+   JPM      LONG +0.077          +0.543 306.37            385.75          1.26     +0.00
+  INTC      LONG +0.076          +0.534  36.40            379.06         10.42     +0.00
+   UNH      LONG +0.063          +0.443 368.28            314.84          0.85     +0.00
+  TSLA      LONG +0.054          +0.383 432.85            272.03          0.63     +0.00
+    KO      LONG +0.050          +0.355  66.26            252.27          3.81     +0.00
+2025-10-08 07:25:00,885 [INFO] Polling live data at 2025-10-08T14:25:00.885726+00:00
+2025-10-08 07:25:02,595 [INFO] Generated 10 signals.
+2025-10-08 07:25:02,598 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.331          -0.708 153.87          1,652.63         10.74     +0.00
+   AMD     SHORT -0.269          -0.576 220.40          1,343.64          6.10     +0.00
+  NVDA     SHORT -0.151          -0.323 188.60            753.73          4.00     +0.00
+  AAPL      LONG +0.140          +0.998 257.86            701.55          2.72     +0.00
+    PG      LONG +0.112          +0.794 151.10            558.65          3.70     +0.00
+   JNJ      LONG +0.089          +0.631 188.54            443.79          2.35     +0.00
+   JPM      LONG +0.082          +0.586 306.86            412.04          1.34     +0.00
+  INTC      LONG +0.075          +0.533  36.44            374.99         10.29     +0.00
+   UNH      LONG +0.062          +0.439 368.44            308.42          0.84     +0.00
+  TSLA      LONG +0.054          +0.381 434.33            267.87          0.62     +0.00
+2025-10-08 07:30:00,897 [INFO] Polling live data at 2025-10-08T14:30:00.897321+00:00
+2025-10-08 07:30:02,755 [INFO] Generated 10 signals.
+2025-10-08 07:30:02,758 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.413          -0.707 153.64          2,066.83         13.45     +0.00
+   AMD     SHORT -0.337          -0.576 220.33          1,683.17          7.64     +0.00
+  AAPL      LONG +0.141          +0.999 257.84            704.99          2.73     +0.00
+    PG      LONG +0.113          +0.800 151.07            564.65          3.74     +0.00
+   JNJ      LONG +0.088          +0.620 188.29            437.56          2.32     +0.00
+   JPM      LONG +0.085          +0.606 307.17            427.36          1.39     +0.00
+  INTC      LONG +0.075          +0.532  36.64            375.49         10.25     +0.00
+   UNH      LONG +0.058          +0.411 369.35            290.17          0.79     +0.00
+  TSLA      LONG +0.054          +0.381 434.55            268.52          0.62     +0.00
+   DIS      LONG +0.050          +0.353 112.82            248.92          2.21     +0.00
+2025-10-08 07:35:00,899 [INFO] Polling live data at 2025-10-08T14:35:00.899097+00:00
+2025-10-08 07:35:02,949 [INFO] Generated 10 signals.
+2025-10-08 07:35:02,953 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.413          -0.709 153.57          2,066.64         13.46     +0.00
+   AMD     SHORT -0.337          -0.577 220.84          1,683.36          7.62     +0.00
+  AAPL      LONG +0.144          +1.000 257.62            718.83          2.79     +0.00
+    PG      LONG +0.116          +0.807 151.02            580.21          3.84     +0.00
+   JNJ      LONG +0.092          +0.637 188.87            457.67          2.42     +0.00
+   JPM      LONG +0.087          +0.606 307.18            435.89          1.42     +0.00
+  INTC      LONG +0.077          +0.532  36.63            382.63         10.44     +0.00
+  TSLA      LONG +0.055          +0.384 431.98            276.11          0.64     +0.00
+   DIS      LONG +0.051          +0.356 112.76            255.70          2.27     +0.00
+    KO      LONG +0.049          +0.342  66.30            245.92          3.71     +0.00
+2025-10-08 07:40:00,912 [INFO] Polling live data at 2025-10-08T14:40:00.912282+00:00
+2025-10-08 07:40:02,688 [INFO] Generated 10 signals.
+2025-10-08 07:40:02,692 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.351          -0.733 153.23          1,753.82         11.45     +0.00
+   AMD     SHORT -0.276          -0.577 220.58          1,379.17          6.25     +0.00
+  AAPL      LONG +0.141          +1.000 257.44            707.31          2.75     +0.00
+  NVDA     SHORT -0.123          -0.258 188.85            617.00          3.27     +0.00
+    PG      LONG +0.116          +0.819 150.95            579.61          3.84     +0.00
+   JNJ      LONG +0.090          +0.636 189.02            449.64          2.38     +0.00
+   JPM      LONG +0.087          +0.614 307.33            434.02          1.41     +0.00
+  INTC      LONG +0.075          +0.532  36.69            376.43         10.26     +0.00
+  TSLA      LONG +0.054          +0.383 432.87            270.83          0.63     +0.00
+    KO      LONG +0.053          +0.375  66.18            264.99          4.00     +0.00
+2025-10-08 07:45:00,924 [INFO] Polling live data at 2025-10-08T14:45:00.924763+00:00
+2025-10-08 07:45:02,581 [INFO] Generated 10 signals.
+2025-10-08 07:45:02,584 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.321          -0.706 153.70          1,605.27         10.44     +0.00
+   AMD     SHORT -0.265          -0.584 222.34          1,326.37          5.97     +0.00
+  NVDA     SHORT -0.164          -0.360 188.46            818.36          4.34     +0.00
+  AAPL      LONG +0.142          +1.000 257.38            711.63          2.76     +0.00
+    PG      LONG +0.115          +0.805 151.04            572.61          3.79     +0.00
+   JNJ      LONG +0.091          +0.637 188.85            453.06          2.40     +0.00
+   JPM      LONG +0.086          +0.606 307.17            430.94          1.40     +0.00
+  INTC      LONG +0.076          +0.532  36.71            378.71         10.32     +0.00
+  TSLA      LONG +0.055          +0.384 432.16            273.17          0.63     +0.00
+   DIS      LONG +0.051          +0.361 112.62            257.23          2.28     +0.00
+2025-10-08 07:50:00,940 [INFO] Polling live data at 2025-10-08T14:50:00.940475+00:00
+2025-10-08 07:50:02,713 [INFO] Generated 10 signals.
+2025-10-08 07:50:02,716 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.321          -0.707 153.81          1,602.76         10.42     +0.00
+   AMD     SHORT -0.264          -0.583 222.27          1,322.17          5.95     +0.00
+  NVDA     SHORT -0.165          -0.364 188.45            825.07          4.38     +0.00
+  AAPL      LONG +0.152          +1.000 257.49            757.76          2.94     +0.00
+    PG      LONG +0.118          +0.781 151.18            591.44          3.91     +0.00
+   JNJ      LONG +0.096          +0.637 188.85            482.43          2.55     +0.00
+   JPM      LONG +0.093          +0.614 307.34            465.49          1.51     +0.00
+  INTC      LONG +0.081          +0.532  36.63            403.35         11.01     +0.00
+  TSLA      LONG +0.058          +0.383 432.68            290.34          0.67     +0.00
+   DIS      LONG +0.055          +0.360 112.65            273.06          2.42     +0.00
+2025-10-08 07:55:00,949 [INFO] Polling live data at 2025-10-08T14:55:00.949465+00:00
+2025-10-08 07:55:02,850 [INFO] Generated 10 signals.
+2025-10-08 07:55:02,854 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.313          -0.710 153.92          1,566.89         10.18     +0.00
+   AMD     SHORT -0.258          -0.585 222.59          1,289.75          5.79     +0.00
+  NVDA     SHORT -0.179          -0.405 188.29            893.37          4.74     +0.00
+  AAPL      LONG +0.151          +1.000 257.67            754.91          2.93     +0.00
+    PG      LONG +0.119          +0.787 151.15            593.86          3.93     +0.00
+   JNJ      LONG +0.096          +0.636 188.99            480.20          2.54     +0.00
+   JPM      LONG +0.092          +0.606 307.17            457.57          1.49     +0.00
+  INTC      LONG +0.080          +0.532  36.74            401.74         10.93     +0.00
+  TSLA      LONG +0.058          +0.383 432.84            289.09          0.67     +0.00
+    KO      LONG +0.056          +0.369  66.21            278.93          4.21     +0.00
+2025-10-08 08:00:00,963 [INFO] Polling live data at 2025-10-08T15:00:00.963968+00:00
+2025-10-08 08:00:02,678 [INFO] Generated 10 signals.
+2025-10-08 08:00:02,682 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.330          -0.710 153.92          1,649.80         10.72     +0.00
+   AMD     SHORT -0.274          -0.589 223.43          1,368.55          6.13     +0.00
+  AAPL      LONG +0.152          +1.000 257.61            761.12          2.95     +0.00
+  NVDA     SHORT -0.146          -0.315 188.63            731.65          3.88     +0.00
+    PG      LONG +0.118          +0.777 151.20            591.37          3.91     +0.00
+   JNJ      LONG +0.097          +0.637 188.90            484.58          2.57     +0.00
+   JPM      LONG +0.093          +0.611 307.27            464.88          1.51     +0.00
+  INTC      LONG +0.081          +0.532  36.87            405.23         10.99     +0.00
+  TSLA      LONG +0.058          +0.384 432.14            292.19          0.68     +0.00
+   DIS      LONG +0.055          +0.361 112.64            274.41          2.44     +0.00
+2025-10-08 08:05:00,964 [INFO] Polling live data at 2025-10-08T15:05:00.964826+00:00
+2025-10-08 08:05:02,781 [INFO] Generated 10 signals.
+2025-10-08 08:05:02,785 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.324          -0.710 153.92          1,619.11         10.52     +0.00
+   AMD     SHORT -0.270          -0.593 224.08          1,352.22          6.03     +0.00
+  NVDA     SHORT -0.156          -0.342 188.54            778.67          4.13     +0.00
+  AAPL      LONG +0.149          +0.976 258.13            747.05          2.89     +0.00
+    PG      LONG +0.122          +0.796 151.09            609.11          4.03     +0.00
+   JNJ      LONG +0.097          +0.637 188.90            487.09          2.58     +0.00
+   JPM      LONG +0.092          +0.599 307.05            458.14          1.49     +0.00
+  INTC      LONG +0.081          +0.532  36.85            407.26         11.05     +0.00
+  TSLA      LONG +0.059          +0.383 432.50            293.32          0.68     +0.00
+    KO      LONG +0.056          +0.367  66.21            280.91          4.24     +0.00
+2025-10-08 08:10:00,965 [INFO] Polling live data at 2025-10-08T15:10:00.965866+00:00
+2025-10-08 08:10:03,065 [INFO] Generated 10 signals.
+2025-10-08 08:10:03,068 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.306          -0.713 153.98          1,529.05          9.93     +0.00
+   AMD     SHORT -0.255          -0.595 224.33          1,275.15          5.68     +0.00
+  NVDA     SHORT -0.189          -0.441 188.15            945.80          5.03     +0.00
+  AAPL      LONG +0.158          +0.974 258.15            790.24          3.06     +0.00
+    PG      LONG +0.128          +0.786 151.15            637.55          4.22     +0.00
+   JNJ      LONG +0.103          +0.635 189.07            515.07          2.72     +0.00
+   JPM      LONG +0.097          +0.598 307.03            484.85          1.58     +0.00
+  INTC      LONG +0.086          +0.532  36.79            431.81         11.74     +0.00
+  TSLA      LONG +0.062          +0.381 434.58            308.80          0.71     +0.00
+    KO      LONG +0.058          +0.359  66.25            291.63          4.40     +0.00
+2025-10-08 08:15:00,972 [INFO] Polling live data at 2025-10-08T15:15:00.972318+00:00
+2025-10-08 08:15:07,674 [INFO] Generated 10 signals.
+2025-10-08 08:15:07,677 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.218          -0.599 154.19          1,088.95          7.06     +0.00
+     V     SHORT -0.202          -0.555 353.15          1,009.70          2.86     +0.00
+   AMD     SHORT -0.189          -0.519 223.93            944.57          4.22     +0.00
+   BAC     SHORT -0.141          -0.389  50.47            706.78         14.00     +0.00
+  NVDA      LONG +0.129          +1.000 188.07            644.20          3.43     +0.00
+   JPM      LONG +0.129          +1.000 307.07            644.20          2.10     +0.00
+  AAPL      LONG +0.118          +0.916 258.20            590.25          2.29     +0.00
+   JNJ      LONG +0.081          +0.630 189.25            405.88          2.14     +0.00
+   DIS      LONG +0.058          +0.450 112.57            289.93          2.58     +0.00
+   UNH      LONG +0.058          +0.449 372.89            289.34          0.78     +0.00
+2025-10-08 08:20:00,984 [INFO] Polling live data at 2025-10-08T15:20:00.984081+00:00
+2025-10-08 08:20:02,923 [INFO] Generated 10 signals.
+2025-10-08 08:20:02,927 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.215          -0.593 154.26          1,076.54          6.98     +0.00
+     V     SHORT -0.201          -0.554 353.08          1,005.48          2.85     +0.00
+   AMD     SHORT -0.189          -0.522 223.21            947.13          4.24     +0.00
+   BAC     SHORT -0.144          -0.397  50.45            720.84         14.29     +0.00
+  NVDA      LONG +0.128          +1.000 187.95            641.07          3.41     +0.00
+   JPM      LONG +0.128          +1.000 306.88            641.07          2.09     +0.00
+  AAPL      LONG +0.121          +0.946 257.96            606.18          2.35     +0.00
+   JNJ      LONG +0.080          +0.623 189.10            399.68          2.11     +0.00
+   UNH      LONG +0.061          +0.477 371.74            305.71          0.82     +0.00
+   DIS      LONG +0.058          +0.449 112.61            287.63          2.55     +0.00
+2025-10-08 08:25:00,991 [INFO] Polling live data at 2025-10-08T15:25:00.991578+00:00
+2025-10-08 08:25:02,777 [INFO] Generated 10 signals.
+2025-10-08 08:25:02,781 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.215          -0.591 154.28          1,077.35          6.98     +0.00
+     V     SHORT -0.202          -0.554 353.10          1,010.14          2.86     +0.00
+   AMD     SHORT -0.189          -0.518 224.49            944.72          4.21     +0.00
+   BAC     SHORT -0.144          -0.394  50.46            717.79         14.22     +0.00
+  NVDA      LONG +0.129          +1.000 188.02            645.46          3.43     +0.00
+   JPM      LONG +0.129          +1.000 307.09            645.46          2.10     +0.00
+  AAPL      LONG +0.116          +0.901 258.31            581.49          2.25     +0.00
+   JNJ      LONG +0.079          +0.614 188.95            396.61          2.10     +0.00
+   UNH      LONG +0.062          +0.482 371.50            311.21          0.84     +0.00
+   DIS      LONG +0.059          +0.454 112.43            292.74          2.60     +0.00
+2025-10-08 08:30:00,996 [INFO] Polling live data at 2025-10-08T15:30:00.996088+00:00
+2025-10-08 08:30:02,927 [INFO] Generated 10 signals.
+2025-10-08 08:30:02,930 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.214          -0.590 154.29          1,068.08          6.92     +0.00
+     V     SHORT -0.202          -0.559 353.36          1,010.78          2.86     +0.00
+   AMD     SHORT -0.188          -0.519 224.12            938.94          4.19     +0.00
+   BAC     SHORT -0.146          -0.405  50.42            732.21         14.52     +0.00
+  NVDA      LONG +0.128          +1.000 188.27            639.65          3.40     +0.00
+   JPM      LONG +0.128          +1.000 307.26            639.65          2.08     +0.00
+  AAPL      LONG +0.120          +0.935 258.05            597.96          2.32     +0.00
+   JNJ      LONG +0.079          +0.614 188.94            392.84          2.08     +0.00
+   UNH      LONG +0.062          +0.483 371.44            309.21          0.83     +0.00
+   DIS      LONG +0.058          +0.453 112.43            290.06          2.58     +0.00
