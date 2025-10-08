@@ -80,3 +80,19 @@ ticker direction weight signal_strength  price capital_allocated target_shares s
     PG      LONG +0.077          +0.495 152.56          7,670.59         50.28     +0.00
   TSLA      LONG +0.059          +0.383 432.87          5,932.39         13.70     +0.00
 2025-10-08 02:08:24,173 [INFO] Live runner stopped.
+2025-10-08 02:11:36,861 [INFO] Loading genome from best_genome.npy
+2025-10-08 02:11:36,862 [INFO] Genome loaded (80 weights).
+2025-10-08 02:11:36,862 [INFO] Polling live data at 2025-10-08T09:11:36.862242+00:00
+2025-10-08 02:11:42,636 [INFO] Generated 10 signals.
+2025-10-08 02:11:42,640 [INFO] 
+ticker direction weight signal_strength  price capital_allocated target_shares sentiment
+   CVX     SHORT -0.322          -1.000 154.90          1,608.96         10.39     +0.00
+  NVDA     SHORT -0.218          -0.678 184.96          1,090.72          5.90     +0.00
+   AMD     SHORT -0.210          -0.653 211.49          1,050.33          4.97     +0.00
+  AAPL      LONG +0.174          +1.000 256.49            871.02          3.40     +0.00
+   UNH      LONG +0.114          +0.655 363.82            570.93          1.57     +0.00
+  TSLA      LONG +0.108          +0.619 432.87            538.82          1.24     +0.00
+   JNJ      LONG +0.099          +0.567 188.90            493.90          2.61     +0.00
+  MSFT      LONG +0.074          +0.426 523.97            370.87          0.71     +0.00
+  INTC      LONG +0.068          +0.393  37.19            342.20          9.20     +0.00
+   DIS      LONG +0.065          +0.372 112.54            324.30          2.88     +0.00
